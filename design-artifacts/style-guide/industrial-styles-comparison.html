@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Industrial UI Style Directions</title>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, sans-serif;
+            line-height: 1.6;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .main-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .style-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .style-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .style-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .style-description {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        
+        .demo-phone {
+            width: 280px;
+            height: 500px;
+            margin: 0 auto 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        /* Style 1: Utilitarian Minimalism */
+        .utilitarian {
+            background: #ffffff;
+            font-family: Inter, sans-serif;
+        }
+        
+        .utilitarian .header {
+            background: #f8f9fa;
+            padding: 16px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .utilitarian .title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #212529;
+            margin-bottom: 4px;
+        }
+        
+        .utilitarian .status {
+            font-size: 14px;
+            color: #6c757d;
+        }
+        
+        .utilitarian .content {
+            padding: 16px;
+            flex: 1;
+        }
+        
+        .utilitarian .button {
+            background: #0d6efd;
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .utilitarian .button:hover {
+            background: #0b5ed7;
+        }
+        
+        .utilitarian .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 12px;
+            background: #f8f9fa;
+            margin-bottom: 4px;
+            border-radius: 4px;
+        }
+        
+        /* Style 2: Neo-Brutalism */
+        .neo-brutal {
+            background: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .neo-brutal .header {
+            background: #000000;
+            color: #ffffff;
+            padding: 20px 16px;
+        }
+        
+        .neo-brutal .title {
+            font-size: 20px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+        
+        .neo-brutal .status {
+            font-size: 14px;
+            color: #cccccc;
+        }
+        
+        .neo-brutal .content {
+            padding: 20px 16px;
+        }
+        
+        .neo-brutal .button {
+            background: #ff6b35;
+            color: #ffffff;
+            border: none;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #000000;
+        }
+        
+        .neo-brutal .button:hover {
+            background: #e55a2b;
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #000000;
+        }
+        
+        .neo-brutal .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: #f0f0f0;
+            border: 2px solid #000000;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+        
+        /* Style 3: Industrial Chic */
+        .industrial-chic {
+            background: #2a2a2a;
+            color: #ffffff;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        
+        .industrial-chic .header {
+            background: linear-gradient(135deg, #3a3a3a 0%, #2a2a2a 100%);
+            padding: 16px;
+            border-bottom: 1px solid #444444;
+        }
+        
+        .industrial-chic .title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #00ff88;
+            margin-bottom: 4px;
+        }
+        
+        .industrial-chic .status {
+            font-size: 12px;
+            color: #888888;
+        }
+        
+        .industrial-chic .content {
+            padding: 16px;
+        }
+        
+        .industrial-chic .button {
+            background: linear-gradient(135deg, #ff6b35 0%, #ff8c42 100%);
+            color: #ffffff;
+            border: 1px solid #ff6b35;
+            padding: 12px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .industrial-chic .button:hover {
+            background: linear-gradient(135deg, #e55a2b 0%, #e67e38 100%);
+        }
+        
+        .industrial-chic .data-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 10px;
+            background: #333333;
+            border: 1px solid #444444;
+            margin-bottom: 4px;
+            font-size: 12px;
+        }
+        
+        .industrial-chic .data-value {
+            color: #00ff88;
+        }
+        
+        /* Style 4: Scandinavian Industrial */
+        .scandi-industrial {
+            background: #fefefe;
+            font-family: Inter, sans-serif;
+        }
+        
+        .scandi-industrial .header {
+            background: #f7f7f7;
+            padding: 18px 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .scandi-industrial .title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #2c2c2c;
+            margin-bottom: 4px;
+        }
+        
+        .scandi-industrial .status {
+            font-size: 14px;
+            color: #757575;
+        }
+        
+        .scandi-industrial .content {
+            padding: 18px 16px;
+        }
+        
+        .scandi-industrial .button {
+            background: #2c5aa0;
+            color: #ffffff;
+            border: none;
+            padding: 14px 22px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 14px;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .scandi-industrial .button:hover {
+            background: #1e4080;
+        }
+        
+        .scandi-industrial .data-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 14px;
+            background: #f9f9f9;
+            border-left: 3px solid #2c5aa0;
+            margin-bottom: 6px;
+            border-radius: 2px;
+        }
+        
+        .scandi-industrial .data-value {
+            font-weight: 500;
+            color: #2c5aa0;
+        }
+        
+        .characteristics {
+            margin-top: 16px;
+        }
+        
+        .characteristics h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .characteristics ul {
+            list-style: none;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .characteristics li {
+            padding: 2px 0;
+        }
+        
+        .characteristics li::before {
+            content: "▪ ";
+            color: #999;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-header">
+        <h1>Industrial UI Style Directions</h1>
+        <p>Four modern approaches to industrial user interface design</p>
+    </div>
+    
+    <div class="style-container">
+        <!-- Style 1: Utilitarian Minimalism -->
+        <div class="style-card">
+            <h2 class="style-title">1. Utilitarian Minimalism</h2>
+            <p class="style-description">Clean, functional design focused on clarity and efficiency. High contrast, simple typography, purposeful spacing.</p>
+            
+            <div class="demo-phone utilitarian">
+                <div class="header">
+                    <div class="title">Delivery #12345</div>
+                    <div class="status">12 scanned, 3 stored</div>
+                </div>
+                <div class="content">
+                    <button class="button">📷 SCAN PALLET</button>
+                    <div class="data-item">
+                        <span>PAL-001234</span>
+                        <span>✓ Stored</span>
+                    </div>
+                    <div class="data-item">
+                        <span>PAL-001233</span>
+                        <span>Staged</span>
+                    </div>
+                    <div class="data-item">
+                        <span>PAL-001232</span>
+                        <span>✓ Stored</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="characteristics">
+                <h4>Key Characteristics:</h4>
+                <ul>
+                    <li>Inter font family for readability</li>
+                    <li>Subtle grays and blues</li>
+                    <li>Clean, minimal spacing</li>
+                    <li>Standard button interactions</li>
+                    <li>High accessibility compliance</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Style 2: Neo-Brutalism -->
+        <div class="style-card">
+            <h2 class="style-title">2. Neo-Brutalism</h2>
+            <p class="style-description">Bold, stark design with strong contrasts and industrial strength. Inspired by concrete architecture and functional design.</p>
+            
+            <div class="demo-phone neo-brutal">
+                <div class="header">
+                    <div class="title">Delivery #12345</div>
+                    <div class="status">12 scanned, 3 stored</div>
+                </div>
+                <div class="content">
+                    <button class="button">📷 SCAN PALLET</button>
+                    <div class="data-item">
+                        <span>PAL-001234</span>
+                        <span>✓ STORED</span>
+                    </div>
+                    <div class="data-item">
+                        <span>PAL-001233</span>
+                        <span>STAGED</span>
+                    </div>
+                    <div class="data-item">
+                        <span>PAL-001232</span>
+                        <span>✓ STORED</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="characteristics">
+                <h4>Key Characteristics:</h4>
+                <ul>
+                    <li>Space Grotesk bold typography</li>
+                    <li>High contrast black/white/orange</li>
+                    <li>Drop shadows and hard edges</li>
+                    <li>Uppercase text for emphasis</li>
+                    <li>Bold, confident interactions</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Style 3: Industrial Chic -->
+        <div class="style-card">
+            <h2 class="style-title">3. Industrial Chic</h2>
+            <p class="style-description">Dark theme with monospace typography and terminal aesthetics. Metal textures and precise data presentation.</p>
+            
+            <div class="demo-phone industrial-chic">
+                <div class="header">
+                    <div class="title">DELIVERY_12345</div>
+                    <div class="status">12_scanned | 3_stored</div>
+                </div>
+                <div class="content">
+                    <button class="button">[SCAN_PALLET]</button>
+                    <div class="data-item">
+                        <span>PAL-001234</span>
+                        <span class="data-value">STORED</span>
+                    </div>
+                    <div class="data-item">
+                        <span>PAL-001233</span>
+                        <span class="data-value">STAGED</span>
+                    </div>
+                    <div class="data-item">
+                        <span>PAL-001232</span>
+                        <span class="data-value">STORED</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="characteristics">
+                <h4>Key Characteristics:</h4>
+                <ul>
+                    <li>JetBrains Mono monospace font</li>
+                    <li>Dark theme with neon accents</li>
+                    <li>Terminal/command line aesthetics</li>
+                    <li>Precise, data-focused layout</li>
+                    <li>Technical, professional feel</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Style 4: Scandinavian Industrial -->
+        <div class="style-card">
+            <h2 class="style-title">4. Scandinavian Industrial</h2>
+            <p class="style-description">Clean Nordic design meets industrial functionality. Accessible, human-centered with subtle industrial cues.</p>
+            
+            <div class="demo-phone scandi-industrial">
+                <div class="header">
+                    <div class="title">Delivery #12345</div>
+                    <div class="status">12 scanned, 3 stored</div>
+                </div>
+                <div class="content">
+                    <button class="button">📷 Scan Pallet</button>
+                    <div class="data-item">
+                        <span>PAL-001234</span>
+                        <span class="data-value">✓ Stored</span>
+                    </div>
+                    <div class="data-item">
+                        <span>PAL-001233</span>
+                        <span class="data-value">Staged</span>
+                    </div>
+                    <div class="data-item">
+                        <span>PAL-001232</span>
+                        <span class="data-value">✓ Stored</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="characteristics">
+                <h4>Key Characteristics:</h4>
+                <ul>
+                    <li>Inter font with excellent readability</li>
+                    <li>Muted blues and grays</li>
+                    <li>Generous white space</li>
+                    <li>Subtle industrial accents</li>
+                    <li>Human-centered design</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactive hover effects
+        document.querySelectorAll('.demo-phone').forEach(phone => {
+            const button = phone.querySelector('.button');
+            if (button) {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    button.style.transform = 'scale(0.95)';
+                    setTimeout(() => {
+                        button.style.transform = '';
+                    }, 150);
+                });
+            }
+        });
+    </script>
+</body>
+</html>

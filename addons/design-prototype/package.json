@@ -1,0 +1,47 @@
+{
+  "name": "@rwsdk/design-prototype",
+  "version": "0.1.0-placeholder",
+  "description": "Serve HTML design artifacts as RWSDK prototypes with dynamic data injection",
+  "main": "index.ts",
+  "type": "module",
+  "keywords": [
+    "rwsdk",
+    "addon",
+    "design",
+    "prototype",
+    "html",
+    "artifacts",
+    "mockup",
+    "ui"
+  ],
+  "author": "RWSDK Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/rwsdk-addons.git",
+    "directory": "packages/design-prototype"
+  },
+  "peerDependencies": {
+    "rwsdk": ">=0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "typescript": "^5.8.3"
+  },
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "types": "./index.ts"
+    }
+  },
+  "files": [
+    "index.ts",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

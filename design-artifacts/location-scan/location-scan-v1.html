@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Scan Confirmation</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .mockup-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .phone {
+            width: 300px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 16px 0;
+            margin-bottom: 20px;
+        }
+        
+        .scan-result {
+            background: #e8f5e8;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .scan-result.error {
+            background: #ffebee;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+        
+        .scan-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #666;
+        }
+        
+        .info-value {
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: auto;
+        }
+        
+        .action-button {
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .primary-action {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        .secondary-action {
+            background: #2196F3;
+            color: white;
+        }
+        
+        .tertiary-action {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .quick-scan {
+            background: #e3f2fd;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .scan-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 12px;
+        }
+        
+        .location-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .location-status.available {
+            background: #e8f5e8;
+            color: #2e7d2e;
+        }
+        
+        .location-status.occupied {
+            background: #fff3e0;
+            color: #e65100;
+        }
+    </style>
+</head>
+<body>
+    <h1>Location Scan Confirmation Options</h1>
+    
+    <div class="mockup-container">
+        <!-- Success confirmation -->
+        <div class="phone">
+            <div class="header">
+                <h3>Location Scan - Success</h3>
+            </div>
+            
+            <div class="scan-result">
+                <div class="success-icon">✅</div>
+                <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                    Location Confirmed
+                </div>
+                <div style="color: #4CAF50; font-size: 16px;">
+                    Pallet stored at S18
+                </div>
+            </div>
+            
+            <div class="scan-info">
+                <div class="info-row">
+                    <span class="info-label">Pallet ID:</span>
+                    <span class="info-value">PAL-001234</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Location:</span>
+                    <span class="info-value">S18</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Time:</span>
+                    <span class="info-value">3:45 PM</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Delivery:</span>
+                    <span class="info-value">DEL-12345</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-button primary-action">Continue Scanning</button>
+                <button class="action-button tertiary-action">Back to Delivery</button>
+            </div>
+        </div>
+        
+        <!-- Pre-scan state -->
+        <div class="phone">
+            <div class="header">
+                <h3>Scan Location Code</h3>
+            </div>
+            
+            <div class="quick-scan">
+                <div style="font-size: 16px; margin-bottom: 12px;">
+                    Scan the QR code or barcode on the floor
+                </div>
+                <button class="action-button secondary-action" style="width: 80%; margin: 0 auto;">
+                    📷 Scan Location
+                </button>
+            </div>
+            
+            <div style="text-align: center; margin: 20px 0; color: #999;">
+                — OR —
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <input type="text" class="scan-input" placeholder="Enter location code (e.g., S18, 2243)">
+                <button class="action-button tertiary-action">Enter Location</button>
+            </div>
+            
+            <div class="scan-info">
+                <div class="info-row">
+                    <span class="info-label">Current Pallet:</span>
+                    <span class="info-value">PAL-001234</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">From Delivery:</span>
+                    <span class="info-value">DEL-12345</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-button tertiary-action">Cancel</button>
+            </div>
+        </div>
+        
+        <!-- Location status check -->
+        <div class="phone">
+            <div class="header">
+                <h3>Location Status</h3>
+            </div>
+            
+            <div class="scan-result">
+                <div class="success-icon">📍</div>
+                <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">
+                    Location S18
+                </div>
+                <div class="location-status available">
+                    ✅ Available - Space for 1 more pallet
+                </div>
+            </div>
+            
+            <div class="scan-info">
+                <div class="info-row">
+                    <span class="info-label">Pallet to Store:</span>
+                    <span class="info-value">PAL-001234</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Location:</span>
+                    <span class="info-value">S18</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Current Occupancy:</span>
+                    <span class="info-value">1 of 2 pallets</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-button primary-action">Confirm Storage</button>
+                <button class="action-button tertiary-action">Choose Different Location</button>
+            </div>
+        </div>
+        
+        <!-- Error state -->
+        <div class="phone">
+            <div class="header">
+                <h3>Location Scan - Error</h3>
+            </div>
+            
+            <div class="scan-result error">
+                <div class="success-icon">⚠️</div>
+                <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #d32f2f;">
+                    Location Full
+                </div>
+                <div style="color: #d32f2f; font-size: 16px;">
+                    S18 is at capacity (2/2 pallets)
+                </div>
+            </div>
+            
+            <div class="scan-info">
+                <div class="info-row">
+                    <span class="info-label">Attempted Location:</span>
+                    <span class="info-value">S18</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Current Occupancy:</span>
+                    <span class="info-value">2 of 2 pallets</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Suggested Locations:</span>
+                    <span class="info-value">S19, S20, 2243</span>
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button class="action-button secondary-action">Scan Different Location</button>
+                <button class="action-button tertiary-action">Back to Delivery</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.action-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const action = button.textContent;
+                if (navigator.vibrate && action.includes('Confirm')) {
+                    navigator.vibrate(100);
+                }
+                console.log('Action:', action);
+            });
+        });
+        
+        // Simulate barcode scanner
+        document.querySelectorAll('button[style*="📷"]').forEach(button => {
+            button.addEventListener('click', () => {
+                setTimeout(() => {
+                    alert('Location S18 scanned successfully!');
+                }, 500);
+            });
+        });
+    </script>
+</body>
+</html>

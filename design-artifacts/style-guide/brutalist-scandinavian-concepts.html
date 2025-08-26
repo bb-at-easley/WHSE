@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brutalist-Scandinavian Concept Variations</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: Inter, -apple-system, sans-serif;
+            background: #f8f9fa;
+            padding: 20px;
+            line-height: 1.4;
+        }
+        
+        .concept-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .concept-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+        
+        .concept-header {
+            padding: 20px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        
+        .concept-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        
+        .concept-subtitle {
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .phone-mockup {
+            width: 300px;
+            height: 580px;
+            margin: 20px auto;
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        
+        /* Concept 1: Bold Minimalism */
+        .bold-minimal {
+            background: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .bold-minimal .header {
+            background: #000000;
+            color: #ffffff;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .bold-minimal .sync-dot {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 8px;
+            height: 8px;
+            background: #ff4444;
+            border-radius: 50%;
+        }
+        
+        .bold-minimal .delivery-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .bold-minimal .delivery-status {
+            font-size: 14px;
+            color: #cccccc;
+            font-weight: 500;
+        }
+        
+        .bold-minimal .content {
+            padding: 0;
+            flex: 1;
+            overflow-y: auto;
+            height: 380px;
+        }
+        
+        .bold-minimal .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 15px;
+            font-weight: 500;
+            background: white;
+            transition: background-color 0.2s;
+        }
+        
+        .bold-minimal .activity-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .bold-minimal .activity-item:first-child {
+            background: #f0fff4;
+            border-left: 4px solid #22c55e;
+        }
+        
+        .bold-minimal .pallet-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+        }
+        
+        .bold-minimal .status-badge {
+            font-size: 11px;
+            padding: 4px 8px;
+            border-radius: 2px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .bold-minimal .status-stored {
+            background: #22c55e;
+            color: white;
+        }
+        
+        .bold-minimal .status-staged {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .bold-minimal .actions {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+        }
+        
+        .bold-minimal .scan-btn {
+            width: 100%;
+            background: #000000;
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 16px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .bold-minimal .scan-btn:hover {
+            background: #333333;
+            transform: translateY(-1px);
+        }
+        
+        .bold-minimal .back-btn {
+            width: 100%;
+            background: transparent;
+            color: #666666;
+            border: 1px solid #e0e0e0;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        
+        /* Concept 2: Warm Nordic */
+        .warm-nordic {
+            background: #fefefe;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .warm-nordic .header {
+            background: #f7f6f4;
+            color: #2c2826;
+            padding: 20px;
+            position: relative;
+            border-bottom: 1px solid #e8e6e2;
+        }
+        
+        .warm-nordic .sync-dot {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 10px;
+            height: 10px;
+            background: #d97706;
+            border-radius: 50%;
+        }
+        
+        .warm-nordic .delivery-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #1c1917;
+        }
+        
+        .warm-nordic .delivery-status {
+            font-size: 16px;
+            color: #b45309;
+            font-weight: 500;
+        }
+        
+        .warm-nordic .content {
+            padding: 12px 0;
+            background: #fefefe;
+            height: 380px;
+            overflow-y: auto;
+        }
+        
+        .warm-nordic .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            margin: 4px 16px;
+            background: #f9f8f6;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+        }
+        
+        .warm-nordic .activity-item:hover {
+            background: #f5f4f1;
+            transform: translateY(-1px);
+        }
+        
+        .warm-nordic .activity-item:first-child {
+            background: #ecfdf5;
+            border: 1px solid #d1fae5;
+        }
+        
+        .warm-nordic .pallet-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 500;
+            color: #374151;
+        }
+        
+        .warm-nordic .status-badge {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-weight: 500;
+        }
+        
+        .warm-nordic .status-stored {
+            background: #d1fae5;
+            color: #047857;
+        }
+        
+        .warm-nordic .status-staged {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .warm-nordic .actions {
+            padding: 20px;
+            background: #fefefe;
+        }
+        
+        .warm-nordic .scan-btn {
+            width: 100%;
+            background: #b45309;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .warm-nordic .scan-btn:hover {
+            background: #92400e;
+        }
+        
+        .warm-nordic .back-btn {
+            width: 100%;
+            background: transparent;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        /* Concept 3: Monochrome Energy */
+        .mono-energy {
+            background: #ffffff;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .mono-energy .header {
+            background: #18181b;
+            color: #ffffff;
+            padding: 20px;
+            position: relative;
+        }
+        
+        .mono-energy .sync-dot {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 6px;
+            height: 6px;
+            background: #ef4444;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+        
+        .mono-energy .delivery-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .mono-energy .delivery-status {
+            font-size: 14px;
+            color: #a1a1aa;
+            font-weight: 600;
+        }
+        
+        .mono-energy .content {
+            padding: 8px 0;
+            background: #fafafa;
+            height: 380px;
+            overflow-y: auto;
+        }
+        
+        .mono-energy .activity-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 20px;
+            margin: 2px 0;
+            background: white;
+            font-size: 14px;
+            font-weight: 500;
+            border-left: 3px solid transparent;
+            transition: all 0.15s ease;
+        }
+        
+        .mono-energy .activity-item:hover {
+            border-left-color: #18181b;
+            transform: translateX(2px);
+        }
+        
+        .mono-energy .activity-item:first-child {
+            background: #f4f4f5;
+            border-left-color: #18181b;
+        }
+        
+        .mono-energy .pallet-id {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: #27272a;
+        }
+        
+        .mono-energy .status-badge {
+            font-size: 10px;
+            padding: 4px 6px;
+            border-radius: 0;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border: 1px solid;
+        }
+        
+        .mono-energy .status-stored {
+            background: white;
+            color: #18181b;
+            border-color: #18181b;
+        }
+        
+        .mono-energy .status-staged {
+            background: #18181b;
+            color: white;
+            border-color: #18181b;
+        }
+        
+        .mono-energy .actions {
+            padding: 20px;
+            background: white;
+            border-top: 2px solid #18181b;
+        }
+        
+        .mono-energy .scan-btn {
+            width: 100%;
+            background: #18181b;
+            color: white;
+            border: none;
+            padding: 16px;
+            font-size: 15px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .mono-energy .scan-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .mono-energy .back-btn {
+            width: 100%;
+            background: white;
+            color: #18181b;
+            border: 1px solid #18181b;
+            padding: 12px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .characteristics {
+            padding: 20px;
+        }
+        
+        .char-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .char-list {
+            font-size: 13px;
+            color: #666;
+            list-style: none;
+        }
+        
+        .char-list li {
+            padding: 2px 0;
+        }
+        
+        .char-list li::before {
+            content: "→ ";
+            color: #999;
+            margin-right: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="font-size: 28px; font-weight: 700; margin-bottom: 8px;">Brutalist-Scandinavian Concepts</h1>
+        <p style="color: #666; font-size: 16px;">Three approaches capturing the energy of the low thumb mockup</p>
+    </div>
+    
+    <div class="concept-grid">
+        <!-- Concept 1: Bold Minimalism -->
+        <div class="concept-card">
+            <div class="concept-header">
+                <div class="concept-title">Bold Minimalism</div>
+                <div class="concept-subtitle">Brutalist confidence + clean information density</div>
+            </div>
+            
+            <div class="phone-mockup bold-minimal">
+                <div class="header">
+                    <div class="sync-dot"></div>
+                    <div class="delivery-title">Delivery #12345</div>
+                    <div class="delivery-status">12 scanned, 3 stored</div>
+                </div>
+                
+                <div class="content">
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001234</span>
+                        <span class="status-badge status-stored">STORED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001233</span>
+                        <span class="status-badge status-staged">STAGED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001232</span>
+                        <span class="status-badge status-stored">STORED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001231</span>
+                        <span class="status-badge status-staged">STAGED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001230</span>
+                        <span class="status-badge status-stored">STORED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001229</span>
+                        <span class="status-badge status-staged">STAGED</span>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="scan-btn">📷 SCAN PALLET</button>
+                    <button class="back-btn">← Dashboard</button>
+                </div>
+            </div>
+            
+            <div class="characteristics">
+                <div class="char-title">Energy Sources:</div>
+                <ul class="char-list">
+                    <li>Strong typography hierarchy</li>
+                    <li>Sharp status badges</li>
+                    <li>Hover interactions on list items</li>
+                    <li>Bold scan button presence</li>
+                    <li>Black/white contrast</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Concept 2: Warm Nordic -->
+        <div class="concept-card">
+            <div class="concept-header">
+                <div class="concept-title">Warm Nordic</div>
+                <div class="concept-subtitle">Scandinavian warmth + purposeful interactions</div>
+            </div>
+            
+            <div class="phone-mockup warm-nordic">
+                <div class="header">
+                    <div class="sync-dot"></div>
+                    <div class="delivery-title">Delivery #12345</div>
+                    <div class="delivery-status">12 scanned, 3 stored</div>
+                </div>
+                
+                <div class="content">
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001234</span>
+                        <span class="status-badge status-stored">✓ Stored</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001233</span>
+                        <span class="status-badge status-staged">Staged</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001232</span>
+                        <span class="status-badge status-stored">✓ Stored</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001231</span>
+                        <span class="status-badge status-staged">Staged</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001230</span>
+                        <span class="status-badge status-stored">✓ Stored</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001229</span>
+                        <span class="status-badge status-staged">Staged</span>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="scan-btn">📷 Scan Pallet</button>
+                    <button class="back-btn">← Dashboard</button>
+                </div>
+            </div>
+            
+            <div class="characteristics">
+                <div class="char-title">Energy Sources:</div>
+                <ul class="char-list">
+                    <li>Warm orange accent color</li>
+                    <li>Gentle hover lift effects</li>
+                    <li>Rounded, approachable shapes</li>
+                    <li>Organic color palette</li>
+                    <li>Breathing room + spacing</li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Concept 3: Monochrome Energy -->
+        <div class="concept-card">
+            <div class="concept-header">
+                <div class="concept-title">Monochrome Energy</div>
+                <div class="concept-subtitle">Pure black/white + kinetic interactions</div>
+            </div>
+            
+            <div class="phone-mockup mono-energy">
+                <div class="header">
+                    <div class="sync-dot"></div>
+                    <div class="delivery-title">Delivery #12345</div>
+                    <div class="delivery-status">12 scanned, 3 stored</div>
+                </div>
+                
+                <div class="content">
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001234</span>
+                        <span class="status-badge status-stored">STORED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001233</span>
+                        <span class="status-badge status-staged">STAGED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001232</span>
+                        <span class="status-badge status-stored">STORED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001231</span>
+                        <span class="status-badge status-staged">STAGED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001230</span>
+                        <span class="status-badge status-stored">STORED</span>
+                    </div>
+                    <div class="activity-item">
+                        <span class="pallet-id">PAL-001229</span>
+                        <span class="status-badge status-staged">STAGED</span>
+                    </div>
+                </div>
+                
+                <div class="actions">
+                    <button class="scan-btn">📷 SCAN PALLET</button>
+                    <button class="back-btn">← DASHBOARD</button>
+                </div>
+            </div>
+            
+            <div class="characteristics">
+                <div class="char-title">Energy Sources:</div>
+                <ul class="char-list">
+                    <li>Sliding hover interactions</li>
+                    <li>Pulsing sync indicator</li>
+                    <li>Sharp edge transitions</li>
+                    <li>High contrast typography</li>
+                    <li>Active button feedback</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactive behaviors
+        document.querySelectorAll('.scan-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = '';
+                }, 150);
+            });
+        });
+        
+        // Add hover energy to activity items
+        document.querySelectorAll('.activity-item').forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                if (this.closest('.mono-energy')) {
+                    this.style.borderLeftWidth = '4px';
+                } else if (this.closest('.warm-nordic')) {
+                    this.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+                } else if (this.closest('.bold-minimal')) {
+                    this.style.borderLeftWidth = '6px';
+                    this.style.borderLeftColor = '#22c55e';
+                }
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                this.style.borderLeftWidth = '';
+                this.style.borderLeftColor = '';
+                this.style.boxShadow = '';
+            });
+        });
+    </script>
+</body>
+</html>

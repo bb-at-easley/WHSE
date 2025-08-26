@@ -1,0 +1,47 @@
+{
+  "name": "@rwsdk/offline-sync",
+  "version": "0.1.0-placeholder",
+  "description": "Offline-first data synchronization addon for RWSDK applications",
+  "main": "index.ts",
+  "type": "module",
+  "keywords": [
+    "rwsdk",
+    "addon",
+    "offline",
+    "sync",
+    "indexeddb",
+    "queue",
+    "mobile",
+    "warehouse"
+  ],
+  "author": "RWSDK Community",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/redwoodjs/rwsdk-addons.git",
+    "directory": "packages/offline-sync"
+  },
+  "peerDependencies": {
+    "rwsdk": ">=0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "typescript": "^5.8.3"
+  },
+  "exports": {
+    ".": {
+      "import": "./index.ts",
+      "types": "./index.ts"
+    }
+  },
+  "files": [
+    "index.ts",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

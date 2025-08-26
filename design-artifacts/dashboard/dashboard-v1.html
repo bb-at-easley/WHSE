@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Views</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .mockup-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .phone {
+            width: 300px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+        
+        .app-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .sync-status {
+            font-size: 12px;
+            color: #4CAF50;
+            margin-top: 4px;
+        }
+        
+        .sync-status.offline {
+            color: #FF9800;
+        }
+        
+        .delivery-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .delivery-card:hover {
+            background: #e3f2fd;
+        }
+        
+        .delivery-card.active {
+            background: #e8f5e8;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .delivery-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .delivery-id {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .delivery-time {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .delivery-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 14px;
+        }
+        
+        .stat {
+            color: #666;
+        }
+        
+        .stat strong {
+            color: #333;
+        }
+        
+        .add-delivery {
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .bottom-nav {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+            margin-top: 15px;
+        }
+        
+        .nav-button {
+            background: none;
+            border: none;
+            color: #666;
+            font-size: 12px;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .nav-button.active {
+            color: #2196F3;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            margin: 40px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Dashboard Design Options</h1>
+    
+    <div class="mockup-container">
+        <!-- Dashboard with active deliveries -->
+        <div class="phone">
+            <div class="header">
+                <div class="app-title">Warehouse Inventory</div>
+                <div class="sync-status">✓ Synced 2 min ago</div>
+            </div>
+            
+            <div class="delivery-card active">
+                <div class="delivery-header">
+                    <div class="delivery-id">Delivery #12345</div>
+                    <div class="delivery-time">Started 2:30 PM</div>
+                </div>
+                <div class="delivery-stats">
+                    <div class="stat"><strong>12</strong> scanned</div>
+                    <div class="stat"><strong>3</strong> stored</div>
+                </div>
+            </div>
+            
+            <div class="delivery-card">
+                <div class="delivery-header">
+                    <div class="delivery-id">Delivery #12346</div>
+                    <div class="delivery-time">Started 1:15 PM</div>
+                </div>
+                <div class="delivery-stats">
+                    <div class="stat"><strong>8</strong> scanned</div>
+                    <div class="stat"><strong>8</strong> stored</div>
+                </div>
+            </div>
+            
+            <div class="delivery-card">
+                <div class="delivery-header">
+                    <div class="delivery-id">Delivery #12347</div>
+                    <div class="delivery-time">Started 12:45 PM</div>
+                </div>
+                <div class="delivery-stats">
+                    <div class="stat"><strong>25</strong> scanned</div>
+                    <div class="stat"><strong>18</strong> stored</div>
+                </div>
+            </div>
+            
+            <button class="add-delivery">
+                ➕ Start New Delivery
+            </button>
+            
+            <div class="bottom-nav">
+                <button class="nav-button active">
+                    <div>📦</div>
+                    <div>Deliveries</div>
+                </button>
+                <button class="nav-button">
+                    <div>🔍</div>
+                    <div>Find</div>
+                </button>
+                <button class="nav-button">
+                    <div>📊</div>
+                    <div>Reports</div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Dashboard - empty state -->
+        <div class="phone">
+            <div class="header">
+                <div class="app-title">Warehouse Inventory</div>
+                <div class="sync-status offline">⚠️ Offline - 12 pending</div>
+            </div>
+            
+            <div class="empty-state">
+                No active deliveries
+            </div>
+            
+            <button class="add-delivery">
+                ➕ Start New Delivery
+            </button>
+            
+            <div class="bottom-nav">
+                <button class="nav-button active">
+                    <div>📦</div>
+                    <div>Deliveries</div>
+                </button>
+                <button class="nav-button">
+                    <div>🔍</div>
+                    <div>Find</div>
+                </button>
+                <button class="nav-button">
+                    <div>📊</div>
+                    <div>Reports</div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Dashboard - simplified -->
+        <div class="phone">
+            <div class="header">
+                <div class="app-title">Active Deliveries</div>
+            </div>
+            
+            <div style="background: #e3f2fd; padding: 20px; border-radius: 12px; margin-bottom: 16px; cursor: pointer;">
+                <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">DEL-12345</div>
+                <div style="font-size: 24px; color: #1976d2;"><strong>12</strong> scanned, <strong>3</strong> stored</div>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 12px; margin-bottom: 16px; cursor: pointer;">
+                <div style="font-size: 18px; font-weight: bold; margin-bottom: 8px;">DEL-12346</div>
+                <div style="font-size: 24px; color: #666;"><strong>8</strong> scanned, <strong>8</strong> stored</div>
+            </div>
+            
+            <button class="add-delivery" style="margin-top: 40px;">
+                + NEW DELIVERY
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Add click interactions
+        document.querySelectorAll('.delivery-card, [style*="cursor: pointer"]').forEach(card => {
+            card.addEventListener('click', () => {
+                alert('Navigate to delivery details');
+            });
+        });
+        
+        document.querySelectorAll('.add-delivery').forEach(button => {
+            button.addEventListener('click', () => {
+                alert('Start new delivery flow');
+            });
+        });
+    </script>
+</body>
+</html>

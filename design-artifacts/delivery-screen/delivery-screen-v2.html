@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Screen V2 - Industrial & Collaborative Focus</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .mockup-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .phone {
+            width: 300px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .phone h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .header {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .delivery-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .delivery-meta {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .status-bar {
+            background: #e3f2fd;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .counter-big {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        
+        .counter-detail {
+            font-size: 14px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .scan-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+        
+        .scan-button:active {
+            background: #1565C0;
+        }
+        
+        .action-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .secondary-button {
+            flex: 1;
+            background: #f5f5f5;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .back-button {
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: auto;
+            cursor: pointer;
+        }
+        
+        .sync-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4CAF50;
+        }
+        
+        .sync-indicator.offline {
+            background: #FF9800;
+        }
+        
+        .recent-scans {
+            flex: 1;
+            margin: 10px 0;
+            overflow-y: auto;
+        }
+        
+        .scan-item {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .scan-item:nth-child(1) {
+            background: #e8f5e8;
+        }
+        
+        /* Option D - Status focused */
+        .layout-d .scan-button {
+            height: 100px;
+            margin: 10px 0;
+        }
+        
+        /* Option E - Recent activity */
+        .layout-e .scan-button {
+            height: 80px;
+            margin-bottom: 15px;
+        }
+        
+        /* Option F - Minimal */
+        .layout-f .scan-button {
+            height: 120px;
+            margin: 20px 0;
+        }
+        
+        .layout-f .status-bar {
+            background: white;
+            border: 2px solid #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Delivery Screen V2 - More Variations</h1>
+    
+    <div class="mockup-container">
+        <!-- Layout D: Status-focused with sync indicator -->
+        <div class="phone layout-d">
+            <div class="sync-indicator"></div>
+            <h3>Option D: Status Focused</h3>
+            
+            <div class="header">
+                <div class="delivery-title">Delivery #12345</div>
+                <div class="delivery-meta">Started 2:30 PM • Active</div>
+            </div>
+            
+            <div class="status-bar">
+                <div class="counter-big">12 / 15</div>
+                <div class="counter-detail">scanned • 3 moved to storage</div>
+            </div>
+            
+            <button class="scan-button">
+                📷 Scan Next Pallet
+            </button>
+            
+            <div class="action-row">
+                <button class="secondary-button">Manual Entry</button>
+                <button class="secondary-button">Pause</button>
+            </div>
+            
+            <button class="back-button">← Dashboard</button>
+        </div>
+        
+        <!-- Layout E: Recent activity feed -->
+        <div class="phone layout-e">
+            <div class="sync-indicator offline"></div>
+            <h3>Option E: Activity Feed</h3>
+            
+            <div class="header">
+                <div class="delivery-title">Delivery #12345</div>
+                <div style="font-size: 16px; color: #2196F3; margin-top: 8px;">
+                    <strong>12 scanned, 3 stored</strong>
+                </div>
+            </div>
+            
+            <button class="scan-button">
+                📷 SCAN PALLET
+            </button>
+            
+            <div class="recent-scans">
+                <div class="scan-item">
+                    <span>PAL-001234</span>
+                    <span style="color: #4CAF50;">✓ Stored</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001233</span>
+                    <span style="color: #FF9800;">Staged</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001232</span>
+                    <span style="color: #4CAF50;">✓ Stored</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001231</span>
+                    <span style="color: #FF9800;">Staged</span>
+                </div>
+            </div>
+            
+            <button class="back-button">← Dashboard</button>
+        </div>
+        
+        <!-- Layout F: Minimal industrial -->
+        <div class="phone layout-f">
+            <h3>Option F: Minimal Industrial</h3>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <div style="font-size: 18px; font-weight: bold;">DELIVERY #12345</div>
+            </div>
+            
+            <div class="status-bar">
+                <div style="font-size: 32px; font-weight: bold; color: #333;">12</div>
+                <div style="font-size: 14px; color: #666;">pallets scanned</div>
+                <div style="font-size: 14px; color: #666; margin-top: 8px;">3 moved to storage</div>
+            </div>
+            
+            <button class="scan-button" style="background: #333;">
+                SCAN BARCODE
+            </button>
+            
+            <button class="back-button" style="background: transparent; color: #333; border: 1px solid #333;">
+                ← BACK TO DASHBOARD
+            </button>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.scan-button').forEach((button, index) => {
+            let count = 12;
+            button.addEventListener('click', () => {
+                count++;
+                const phone = button.closest('.phone');
+                
+                // Update counters based on layout
+                if (phone.classList.contains('layout-d')) {
+                    const counter = phone.querySelector('.counter-big');
+                    counter.textContent = `${count} / 15`;
+                } else if (phone.classList.contains('layout-e')) {
+                    const counter = phone.querySelector('.header strong');
+                    counter.textContent = `${count} scanned, 3 stored`;
+                } else if (phone.classList.contains('layout-f')) {
+                    const counter = phone.querySelector('.status-bar div');
+                    counter.textContent = count;
+                }
+                
+                // Haptic feedback simulation
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
