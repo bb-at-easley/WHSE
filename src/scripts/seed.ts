@@ -4,13 +4,10 @@ import { db, setupDb } from "@/db";
 export default defineScript(async ({ env }) => {
   await setupDb(env);
 
-  // Clean existing data
-  await db.$executeRawUnsafe(`\
-    DELETE FROM Membership;
-    DELETE FROM Organization;
-    DELETE FROM User;
-    DELETE FROM sqlite_sequence;
-  `);
+  // Clean existing data (cascade deletes will handle relationships)
+  await db.membership.deleteMany();
+  await db.organization.deleteMany();
+  await db.user.deleteMany();
 
   // Create Easley Transportation organization
   const easleyOrg = await db.organization.create({
