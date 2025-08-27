@@ -121,31 +121,31 @@ This project includes a warehouse inventory management system with mobile-first 
 - Interactive scanning simulation with haptic feedback
 
 ### Design System
-**Warm Nordic Style** - Chosen direction combining Scandinavian warmth with industrial functionality:
+**Clean Mobile-First** - Minimal, functional design optimized for warehouse mobile use:
 
 **Color Palette:**
-- Base: Warm neutrals (#fefefe, #f7f6f4, #f9f8f6, #2c2826, #1c1917)
-- Primary accent: Warm orange (#b45309, #92400e) for actions and emphasis
-- Success states: Industrial green (#047857, #d1fae5)
-- Warning states: Safety orange (#d97706, #fef3c7)
-- Secondary text: Muted grays (#6b7280, #374151)
+- Base: Clean whites and light grays (#ffffff, #f8f9fa, #f5f5f5)
+- Primary accent: Blue (#2196F3, #1976D2, #1565C0) for actions and links
+- Success states: Green (#4CAF50, #e8f5e8) for completed actions
+- Warning states: Orange (#FF9800) for staging/sync indicators
+- Text: Dark grays (#333, #666) for readability
 
 **Typography:**
-- Primary: Inter font family for readability and warmth
-- Data/codes: JetBrains Mono for technical precision
-- Hierarchy: 22px titles, 16px status, 15px body, 14px secondary
+- Primary: System fonts (-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto)
+- Weight hierarchy: Bold (600-700) for titles, normal (400) for body
+- Size hierarchy: 20px titles, 16px status, 14px secondary
 
 **Interaction Design:**
-- Gentle hover lift effects (translateY(-2px))
-- Soft transitions (0.3s ease)
-- Rounded corners (8px-16px) for approachability
-- Subtle shadows for depth and focus
+- Subtle hover lift effects (translateY(-2px))
+- Quick transitions (0.2s)
+- Rounded corners (8px-20px) for mobile-friendly touch targets
+- Soft shadows for depth (0 4px 20px rgba(0,0,0,0.1))
 
 **Design Principles:**
-- Functional warmth over sterile efficiency
-- High contrast while remaining approachable
+- Clean simplicity over visual complexity
+- High contrast for warehouse lighting conditions
 - Large touch targets optimized for thumb-zone interaction
-- Industrial reliability with human-centered aesthetics
+- Mobile-first responsive design
 
 **Mobile Interaction Guidelines:**
 - **Primary actions always in thumb zone** (bottom 30% of screen)
@@ -240,7 +240,7 @@ import { OfflineSync } from "@rwsdk/offline-sync";
 - UI components following Warm Nordic design system
 
 ### Usage Notes
-- All warehouse features use the chosen Warm Nordic design system
-- Mobile interface prioritizes thumb-zone accessibility
+- All warehouse features use the clean mobile-first design system
+- Mobile interface prioritizes thumb-zone accessibility with sticky bottom actions
 - HTML prototypes include detailed React conversion notes
 - Offline-first design for warehouse connectivity challenges

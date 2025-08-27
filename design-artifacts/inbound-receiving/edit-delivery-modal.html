@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Delivery Modal - RWSDK RSC Ready</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .demo-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .phone {
+            width: 300px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .phone h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .sync-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FF9800;
+        }
+        
+        .header {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .delivery-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .edit-delivery-button {
+            background: none;
+            border: none;
+            color: #2196F3;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        
+        .edit-delivery-button:hover {
+            background: #e3f2fd;
+            color: #1976D2;
+        }
+        
+        .delivery-status {
+            font-size: 16px;
+            color: #2196F3;
+            margin-top: 8px;
+        }
+        
+        .recent-scans {
+            flex: 1;
+            overflow-y: auto;
+            margin: 16px 0 100px 0;
+        }
+        
+        .scan-item {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .scan-item:nth-child(1) {
+            background: #e8f5e8;
+        }
+        
+        .pallet-id {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .status-stored {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+        
+        .status-staged {
+            color: #FF9800;
+            font-weight: 600;
+        }
+        
+        .scan-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            height: 60px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            width: 100%;
+        }
+        
+        .scan-button:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+        
+        .scan-button:active {
+            background: #1565C0;
+            transform: translateY(0);
+        }
+        
+        .back-button {
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            margin: 0;
+            transition: background 0.2s;
+        }
+        
+        .back-button:hover {
+            background: #555;
+        }
+        
+        .bottom-actions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Edit Delivery Modal Styles - TODO: Convert to React components with Server Actions */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; /* TODO: Control with React state - const [isEditModalOpen, setIsEditModalOpen] = useState(false) */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-backdrop.show {
+            display: flex;
+        }
+        
+        /* TODO: Add animation with framer-motion or CSS transitions */
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 360px;
+            padding: 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.2s ease;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        
+        .modal-backdrop.show .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            padding: 24px 24px 16px 24px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #666;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        
+        .close-button:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .modal-body {
+            padding: 24px;
+        }
+        
+        /* TODO: Create reusable FormGroup component */
+        .form-group {
+            margin-bottom: 24px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+            background: white;
+            box-sizing: border-box;
+        }
+        
+        .form-input:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+        
+        /* TODO: Add validation styles for invalid inputs */
+        .form-input.error {
+            border-color: #f44336;
+            box-shadow: 0 0 0 3px rgba(244, 67, 54, 0.1);
+        }
+        
+        .form-select {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+            background: white;
+            box-sizing: border-box;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'><path fill='%23666' d='M6 8L2 4h8z'/></svg>");
+            background-repeat: no-repeat;
+            background-position: right 16px center;
+            padding-right: 48px;
+        }
+        
+        .form-select:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+        
+        .form-textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+            background: white;
+            box-sizing: border-box;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+        
+        .form-textarea:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+        
+        .form-help {
+            font-size: 12px;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .modal-footer {
+            padding: 16px 24px 24px 24px;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .save-button {
+            flex: 1;
+            height: 56px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .save-button:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+        
+        .save-button:active {
+            background: #1565C0;
+            transform: translateY(0);
+        }
+        
+        .cancel-button {
+            flex: 1;
+            height: 56px;
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .cancel-button:hover {
+            background: #555;
+        }
+        
+        /* TODO: Add loading state styles for form submission */
+        .save-button.loading {
+            background: #90CAF9;
+            cursor: not-allowed;
+        }
+        
+        .save-button.loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Input groups for related fields */
+        .input-group {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .input-group .form-group {
+            flex: 1;
+            margin-bottom: 24px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Edit Delivery Modal - React RWSDK RSC Ready</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+        Comprehensive delivery editing with expected pallet count and operational fields
+    </p>
+    
+    <div class="demo-container">
+        <!-- Base screen -->
+        <div class="phone">
+            <div class="sync-indicator"></div>
+            <h3>Inbound Check In</h3>
+            
+            <div class="header">
+                <div class="delivery-title">
+                    <span>Delivery #12345</span>
+                    <button class="edit-delivery-button" onclick="showEditModal()">Edit</button>
+                </div>
+                <div class="delivery-status">
+                    <strong>5 of 12 expected pallets</strong>
+                </div>
+            </div>
+            
+            <div class="recent-scans">
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001005</span>
+                    <span class="status-stored">✓ Stored</span>
+                </div>
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001004</span>
+                    <span class="status-stored">✓ Stored</span>
+                </div>
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001003</span>
+                    <span class="status-staged">Staged</span>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="scan-button">
+                    📦 ADD PALLET
+                </button>
+                <button class="back-button">← Dashboard</button>
+            </div>
+        </div>
+        
+        <!-- Screen with edit modal open -->
+        <div class="phone">
+            <div class="sync-indicator"></div>
+            <h3>Edit Modal Open</h3>
+            
+            <div class="header">
+                <div class="delivery-title">
+                    <span>Delivery #12345</span>
+                    <button class="edit-delivery-button">Edit</button>
+                </div>
+                <div class="delivery-status">
+                    <strong>5 of 12 expected pallets</strong>
+                </div>
+            </div>
+            
+            <div class="recent-scans">
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001005</span>
+                    <span class="status-stored">✓ Stored</span>
+                </div>
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001004</span>
+                    <span class="status-stored">✓ Stored</span>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="scan-button">📦 ADD PALLET</button>
+                <button class="back-button">← Dashboard</button>
+            </div>
+            
+            <!-- Edit Delivery Modal - TODO: Convert to React Portal with Server Actions -->
+            <div class="modal-backdrop show" onclick="hideEditModal()">
+                <div class="modal-content" onclick="event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Edit Delivery</h2>
+                        <button class="close-button" onclick="hideEditModal()">×</button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <!-- TODO: Convert to React form with validation and Server Actions
+                             Server Action: updateDelivery(deliveryId, formData)
+                             Validation: zod schema for delivery data
+                        -->
+                        
+                        <div class="form-group">
+                            <label class="form-label">Delivery ID</label>
+                            <input type="text" class="form-input" value="DEL-12345" />
+                            <div class="form-help">Internal tracking number</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Truck/Trailer Number</label>
+                            <input type="text" class="form-input" value="TR-4471" placeholder="e.g. TR-4471, 53-TRAILER-001" />
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="form-group">
+                                <label class="form-label">Expected Pallets</label>
+                                <input type="number" class="form-input" value="12" min="1" max="999" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Priority</label>
+                                <select class="form-select">
+                                    <option value="standard">Standard</option>
+                                    <option value="high" selected>High</option>
+                                    <option value="urgent">Urgent</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Supplier/Vendor</label>
+                            <input type="text" class="form-input" value="Acme Supply Co." placeholder="Company name" />
+                        </div>
+                        
+                        <div class="input-group">
+                            <div class="form-group">
+                                <label class="form-label">Expected Date</label>
+                                <input type="date" class="form-input" value="2024-08-26" />
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Time Window</label>
+                                <select class="form-select">
+                                    <option value="morning">Morning (8-12)</option>
+                                    <option value="afternoon" selected>Afternoon (12-5)</option>
+                                    <option value="evening">Evening (5-8)</option>
+                                    <option value="anytime">Anytime</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Purchase Order #</label>
+                            <input type="text" class="form-input" value="PO-2024-08-1542" placeholder="Optional reference number" />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Special Instructions</label>
+                            <textarea class="form-textarea" placeholder="Handling requirements, dock preferences, contact info...">Fragile items - handle with care. Use dock door 3.</textarea>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button class="cancel-button" onclick="hideEditModal()">Cancel</button>
+                        <button class="save-button" onclick="saveDelivery()">💾 Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // TODO: Remove this JavaScript when converting to React
+        // Replace with React state management and Server Actions
+        
+        function showEditModal() {
+            // TODO: In React: setIsEditModalOpen(true)
+            console.log('Edit modal would open - handle with React state');
+        }
+        
+        function hideEditModal() {
+            // TODO: In React: setIsEditModalOpen(false)  
+            console.log('Edit modal would close - handle with React state');
+        }
+        
+        function saveDelivery() {
+            // TODO: Replace with Server Action call
+            // const formData = new FormData(form)
+            // await updateDelivery(deliveryId, formData)
+            
+            const saveButton = document.querySelector('.save-button');
+            saveButton.classList.add('loading');
+            saveButton.innerHTML = '💾 SAVING...';
+            
+            setTimeout(() => {
+                saveButton.classList.remove('loading');
+                saveButton.innerHTML = '💾 Save Changes';
+                console.log('Delivery updated - would close modal and refresh data');
+                
+                // Update the header to show changes
+                const statusEl = document.querySelector('.delivery-status strong');
+                statusEl.textContent = '5 of 12 expected pallets';
+            }, 2000);
+        }
+        
+        // Demo form interactivity
+        document.querySelectorAll('.form-input[type="number"]').forEach(input => {
+            input.addEventListener('change', (e) => {
+                if (e.target.value) {
+                    const statusEl = document.querySelector('.delivery-status strong');
+                    statusEl.textContent = `5 of ${e.target.value} expected pallets`;
+                }
+            });
+        });
+    </script>
+</body>
+</html>

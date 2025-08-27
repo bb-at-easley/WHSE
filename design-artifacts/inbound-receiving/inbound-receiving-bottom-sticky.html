@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inbound Receiving - Bottom Sticky</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .mockup-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .phone {
+            width: 300px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .phone h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .sync-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FF9800;
+        }
+        
+        .header {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .delivery-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .delivery-status {
+            font-size: 16px;
+            color: #2196F3;
+            margin-top: 8px;
+        }
+        
+        .edit-indicator {
+            font-size: 14px;
+            margin-left: 8px;
+            opacity: 0.7;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .edit-indicator:hover {
+            opacity: 1;
+        }
+        
+        
+        .recent-scans {
+            flex: 1;
+            overflow-y: auto;
+            margin: 16px 0 100px 0;
+        }
+        
+        .scan-item {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .scan-item:nth-child(1) {
+            background: #e8f5e8;
+        }
+        
+        
+        .scan-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+            height: 60px;
+            width: 100%;
+        }
+        
+        .scan-button:active {
+            background: #1565C0;
+        }
+        
+        .scan-button:hover {
+            background: #1976D2;
+        }
+        
+        .back-button {
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            margin: 0;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+        
+        .back-button:hover {
+            background: #555;
+        }
+        
+        /* Sticky bottom buttons */
+        .bottom-actions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inbound Receiving - Bottom Sticky Style</h1>
+    
+    <div class="mockup-container">
+        <!-- Empty state version -->
+        <div class="phone">
+            <div class="sync-indicator"></div>
+            <h3>New Delivery (Empty)</h3>
+            
+            <div class="header">
+                <div class="delivery-title">New Delivery</div>
+                <div class="delivery-status">
+                    <strong>0 pallets received</strong>
+                </div>
+            </div>
+            
+            
+            <div class="recent-scans">
+                <div class="empty-state">
+                    Start adding pallets to track this delivery
+                </div>
+            </div>
+            
+            <!-- Sticky bottom buttons -->
+            <div class="bottom-actions">
+                <button class="scan-button">
+                    📦 ADD PALLET
+                </button>
+                <button class="back-button">← Dashboard</button>
+            </div>
+        </div>
+        
+        <!-- With data version -->
+        <div class="phone">
+            <div class="sync-indicator"></div>
+            <h3>Delivery in Progress</h3>
+            
+            <div class="header">
+                <div class="delivery-title">
+                    Truck #TR-4471
+                    <span class="edit-indicator">✏️</span>
+                </div>
+                <div class="delivery-status">
+                    <strong>5 pallets received</strong>
+                </div>
+            </div>
+            
+            <div class="recent-scans">
+                <div class="scan-item">
+                    <span>PAL-001005</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001004</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001003</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001002</span>
+                    <span style="color: #FF9800;">Staged</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001001</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+            </div>
+            
+            <!-- Sticky bottom buttons -->
+            <div class="bottom-actions">
+                <button class="scan-button">
+                    📦 ADD PALLET
+                </button>
+                <button class="back-button">← Dashboard</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.scan-button').forEach((button, index) => {
+            let count = index === 0 ? 0 : 5;
+            
+            button.addEventListener('click', () => {
+                const phone = button.closest('.phone');
+                const statusEl = phone.querySelector('.delivery-status strong');
+                const activityFeed = phone.querySelector('.recent-scans');
+                const emptyState = phone.querySelector('.empty-state');
+                
+                // Generate pallet ID
+                const palletId = `PAL-${String(count + 1).padStart(6, '0')}`;
+                
+                count++;
+                statusEl.textContent = `${count} pallets received`;
+                
+                // Remove empty state if it exists
+                if (emptyState) {
+                    emptyState.remove();
+                }
+                
+                // Add new pallet item at top
+                const newItem = document.createElement('div');
+                newItem.className = 'scan-item';
+                newItem.innerHTML = `
+                    <span>${palletId}</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                `;
+                
+                activityFeed.insertBefore(newItem, activityFeed.firstChild);
+                
+                // Haptic feedback
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(50);
+                }
+            });
+        });
+        
+        // Simulate mini scan buttons
+        document.querySelectorAll('.scan-mini-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const input = button.previousElementSibling;
+                if (button.textContent === '📷') {
+                    // Generate pallet ID
+                    input.value = `PAL-${String(Math.floor(Math.random() * 999999) + 1).padStart(6, '0')}`;
+                } else {
+                    // Generate location
+                    const zone = ['A', 'B', 'C'][Math.floor(Math.random() * 3)];
+                    const aisle = String(Math.floor(Math.random() * 20) + 1).padStart(2, '0');
+                    const position = Math.floor(Math.random() * 8) + 1;
+                    input.value = `${zone}-${aisle}-${position}`;
+                }
+                
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(30);
+                }
+            });
+        });
+    </script>
+
+    <!-- 
+    REACT CONVERSION NOTES for RedwoodSDK (RSC):
+    
+    COMPONENT BREAKDOWN:
+    1. InboundReceivingScreen.tsx (CLIENT COMPONENT - needs interactivity)
+       - "use client" directive at top
+       - Handle scan button clicks, state management
+       - Manage pallets list and empty state
+       - Haptic feedback
+    
+    2. DeliveryHeader.tsx (SERVER COMPONENT)
+       - Display delivery info, status
+       - Take delivery data as props
+       
+    3. PalletList.tsx (SERVER COMPONENT)  
+       - Render list of pallets or empty state
+       - Take pallets array as props
+       
+    4. ScanButton.tsx (CLIENT COMPONENT)
+       - "use client" for click handlers
+       - Emit events to parent component
+    
+    SERVER FUNCTIONS NEEDED:
+    - addPallet.ts with "use server" directive
+    - updateDeliveryStatus.ts with "use server"
+    - Access ctx via: import { requestInfo } from "rwsdk/worker"
+    
+    ROUTE STRUCTURE:
+    route("/receiving/new", InboundReceivingScreen)
+    route("/receiving/:deliveryId", InboundReceivingScreen)
+    
+    DATA FLOW:
+    1. Server component fetches delivery data on load
+    2. Client component manages local state for scans
+    3. Server functions handle database updates
+    4. Use Suspense boundaries for loading states
+    
+    KEY PATTERNS:
+    - Keep server components as default
+    - Only use client components for interactivity
+    - Pass ctx through props to child components
+    - Use server functions for mutations
+    -->
+</body>
+</html>

@@ -24,7 +24,7 @@ function getWebAuthnConfig(request: Request) {
   };
 }
 
-export async function startPasskeyRegistration(username: string) {
+export async function startPasskeyRegistration(username: string, organizationId?: string) {
   const { rpName, rpID } = getWebAuthnConfig(requestInfo.request);
   const { response } = requestInfo;
 
@@ -63,6 +63,7 @@ export async function startPasskeyLogin() {
 export async function finishPasskeyRegistration(
   username: string,
   registration: RegistrationResponseJSON,
+  organizationId?: string,
 ) {
   const { request, headers } = requestInfo;
   const { origin } = new URL(request.url);
@@ -87,12 +88,15 @@ export async function finishPasskeyRegistration(
 
   await sessions.save(headers, { challenge: null });
 
+  // Create user
   const user = await db.user.create({
     data: {
       username,
+      email: null, // Can be added later via invitation system
     },
   });
 
+  // Create WebAuthn credential
   await db.credential.create({
     data: {
       userId: user.id,
@@ -100,6 +104,23 @@ export async function finishPasskeyRegistration(
       publicKey: verification.registrationInfo.credential.publicKey,
       counter: verification.registrationInfo.credential.counter,
     },
+  });
+
+  // Auto-join user to organization if provided (for MVP)
+  if (organizationId) {
+    await db.membership.create({
+      data: {
+        userId: user.id,
+        organizationId: organizationId,
+        role: "MEMBER", // Default role for new signups
+      },
+    });
+  }
+
+  // Set session to logged in user
+  await sessions.save(headers, {
+    userId: user.id,
+    challenge: null,
   });
 
   return true;

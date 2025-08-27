@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Pallet Modal - Simple UX</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .demo-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .phone {
+            width: 300px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .phone h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .sync-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FF9800;
+        }
+        
+        .header {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .delivery-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .edit-indicator {
+            font-size: 14px;
+            margin-left: 8px;
+            opacity: 0.7;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        
+        .edit-indicator:hover {
+            opacity: 1;
+        }
+        
+        .delivery-status {
+            font-size: 16px;
+            color: #2196F3;
+            margin-top: 8px;
+        }
+        
+        .recent-scans {
+            flex: 1;
+            overflow-y: auto;
+            margin: 16px 0 100px 0;
+        }
+        
+        .scan-item {
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            margin-bottom: 6px;
+            font-size: 14px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .scan-item:nth-child(1) {
+            background: #e8f5e8;
+        }
+        
+        .scan-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s;
+            height: 60px;
+            width: 100%;
+        }
+        
+        .scan-button:active {
+            background: #1565C0;
+        }
+        
+        .scan-button:hover {
+            background: #1976D2;
+        }
+        
+        .back-button {
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        .back-button:hover {
+            background: #555;
+        }
+        
+        .bottom-actions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        /* Modal Styles - TODO: Convert to React components */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none; /* Will be controlled by React state */
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal-backdrop.show {
+            display: flex;
+        }
+        
+        /* TODO: Add animation with framer-motion or CSS transitions */
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 320px;
+            padding: 0;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.2s ease;
+        }
+        
+        .modal-backdrop.show .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-header {
+            padding: 20px 20px 16px 20px;
+            border-bottom: 1px solid #eee;
+            position: relative;
+        }
+        
+        .modal-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #666;
+            cursor: pointer;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+        
+        .close-button:hover {
+            background: #f5f5f5;
+            color: #333;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+        }
+        
+        .input-with-scan {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .form-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.2s;
+            background: white;
+        }
+        
+        .form-input:focus {
+            border-color: #2196F3;
+            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
+        }
+        
+        .scan-mini-button {
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: #6b7280;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+            min-width: 48px;
+            font-weight: bold;
+        }
+        
+        .scan-mini-button:hover {
+            background: #374151;
+        }
+        
+        .modal-footer {
+            padding: 16px 20px 20px 20px;
+        }
+        
+        .add-pallet-button {
+            width: 100%;
+            height: 56px;
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .add-pallet-button:hover {
+            background: #1976D2;
+        }
+        
+        .add-pallet-button:active {
+            background: #1565C0;
+            transform: scale(0.98);
+        }
+        
+        /* TODO: Add loading state styles for form submission */
+        .add-pallet-button.loading {
+            background: #90CAF9;
+            cursor: not-allowed;
+        }
+        
+        .add-pallet-button.loading::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #fff;
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Backdrop hint for non-tech users */
+        .backdrop-hint {
+            position: absolute;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            opacity: 0;
+            animation: fadeInOut 3s infinite;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Add Pallet Modal - Simple UX Design</h1>
+    <p style="text-align: center; color: #666; margin-bottom: 30px;">
+        Dead simple for non-tech users: backdrop tap to close, clear priority guide
+    </p>
+    
+    <div class="demo-container">
+        <!-- Base screen with modal trigger -->
+        <div class="phone">
+            <div class="sync-indicator"></div>
+            <h3>Inbound Receiving</h3>
+            
+            <div class="header">
+                <div class="delivery-title">
+                    Truck #TR-4471
+                    <span class="edit-indicator">✏️</span>
+                </div>
+                <div class="delivery-status">
+                    <strong>5 pallets received</strong>
+                </div>
+            </div>
+            
+            <div class="recent-scans">
+                <div class="scan-item">
+                    <span>PAL-001005</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001004</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001003</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001002</span>
+                    <span style="color: #FF9800;">Staged</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001001</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="scan-button" onclick="showModal()">
+                    📦 ADD PALLET
+                </button>
+                <button class="back-button">← Dashboard</button>
+            </div>
+        </div>
+        
+        <!-- Screen with modal open -->
+        <div class="phone">
+            <div class="sync-indicator"></div>
+            <h3>Modal Open State</h3>
+            
+            <div class="header">
+                <div class="delivery-title">
+                    Truck #TR-4471
+                    <span class="edit-indicator">✏️</span>
+                </div>
+                <div class="delivery-status">
+                    <strong>5 pallets received</strong>
+                </div>
+            </div>
+            
+            <div class="recent-scans">
+                <div class="scan-item">
+                    <span>PAL-001005</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001004</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+                <div class="scan-item">
+                    <span>PAL-001003</span>
+                    <span style="color: #4CAF50;">✓ Received</span>
+                </div>
+            </div>
+            
+            <div class="bottom-actions">
+                <button class="scan-button">
+                    📦 ADD PALLET
+                </button>
+                <button class="back-button">← Dashboard</button>
+            </div>
+            
+            <!-- Modal overlay - TODO: Convert to React Portal -->
+            <div class="modal-backdrop show" onclick="hideModal()">
+                <div class="modal-content" onclick="event.stopPropagation()">
+                    <div class="modal-header">
+                        <h2 class="modal-title">Add Pallet</h2>
+                        <button class="close-button" onclick="hideModal()">×</button>
+                    </div>
+                    
+                    <div class="modal-body">
+                        <!-- TODO: Convert to React form with validation -->
+                        <div class="form-group">
+                            <label class="form-label">Pallet ID</label>
+                            <div class="input-with-scan">
+                                <input type="text" class="form-input" placeholder="Enter pallet ID" />
+                                <button class="scan-mini-button">📷</button>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Storage Location</label>
+                            <div class="input-with-scan">
+                                <input type="text" class="form-input" placeholder="Enter location" />
+                                <button class="scan-mini-button">📍</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <!-- TODO: Connect to server action -->
+                        <button class="add-pallet-button">
+                            📦 ADD PALLET
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Subtle hint for non-tech users -->
+                <div class="backdrop-hint">
+                    Tap outside to close
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // TODO: Remove this JavaScript when converting to React
+        // This is just for demo purposes
+        
+        function showModal() {
+            // In React: setIsModalOpen(true)
+            console.log('Modal would open - handle with React state');
+        }
+        
+        function hideModal() {
+            // In React: setIsModalOpen(false)  
+            console.log('Modal would close - handle with React state');
+        }
+        
+        // Simulate scan buttons
+        document.querySelectorAll('.scan-mini-button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const input = button.previousElementSibling;
+                
+                if (button.textContent === '📷') {
+                    // TODO: Integrate with barcode scanner addon
+                    input.value = `PAL-${String(Math.floor(Math.random() * 999999) + 1).padStart(6, '0')}`;
+                } else {
+                    // TODO: Integrate with location selector
+                    const zone = ['A', 'B', 'C'][Math.floor(Math.random() * 3)];
+                    const aisle = String(Math.floor(Math.random() * 20) + 1).padStart(2, '0');
+                    const position = Math.floor(Math.random() * 8) + 1;
+                    input.value = `${zone}-${aisle}-${position}`;
+                }
+                
+                // Haptic feedback
+                if ('vibrate' in navigator) {
+                    navigator.vibrate(30);
+                }
+            });
+        });
+        
+        // Demo form submission
+        document.querySelector('.add-pallet-button').addEventListener('click', function() {
+            // TODO: Replace with server action submission
+            this.classList.add('loading');
+            this.textContent = 'ADDING...';
+            
+            setTimeout(() => {
+                this.classList.remove('loading');
+                this.innerHTML = '📦 ADD PALLET';
+                console.log('Pallet added - would close modal and refresh list');
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

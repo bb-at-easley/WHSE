@@ -24,15 +24,20 @@ datasource db {
 model User {
   id          String      @id @default(uuid()) // User ID (UUID-based)
   username    String      @unique
+  email       String?     @unique // Optional email for invitations
   createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
 
-  credentials Credential[] // Relationship: One user can have many credentials
+  // Relations
+  credentials Credential[] // WebAuthn credentials
+  memberships Membership[] // Organization memberships
+  invitedUsers Membership[] @relation("InvitedBy") // Users this user invited
 }
 
 model Credential {
   id            String   @id @default(uuid()) // Internal DB ID
-  userId        String   @unique // Every credential is linked to a specific user
-  user          User     @relation(fields: [userId], references: [id])
+  userId        String   // Multiple credentials per user allowed
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt     DateTime @default(now())
   credentialId  String   @unique // WebAuthn credential identifier
   publicKey     Bytes
@@ -40,4 +45,44 @@ model Credential {
   
   @@index([credentialId])
   @@index([userId])
+}
+
+// Multi-tenant core models
+
+model Organization {
+  id          String @id @default(uuid())
+  name        String
+  slug        String @unique // For URLs: /org/acme-warehouse
+  settings    String? // JSON string for SQLite compatibility
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  memberships Membership[]
+}
+
+model Membership {
+  id              String @id @default(uuid())
+  role            Role   @default(MEMBER)
+  userId          String
+  organizationId  String
+  invitedById     String?
+  createdAt       DateTime @default(now())
+  
+  // Relations
+  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  invitedBy    User? @relation("InvitedBy", fields: [invitedById], references: [id])
+  
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+  @@index([userId])
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MANAGER
+  MEMBER
+  VIEWER
 }

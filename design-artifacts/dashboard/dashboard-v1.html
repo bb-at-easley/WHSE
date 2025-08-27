@@ -32,21 +32,24 @@
         
         .header {
             text-align: center;
-            padding: 20px 0;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 20px;
+            padding: 30px 20px;
+            background: white;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
         .app-title {
-            font-size: 18px;
+            font-size: 24px;
             font-weight: bold;
             color: #333;
+            margin-bottom: 8px;
         }
         
         .sync-status {
-            font-size: 12px;
+            font-size: 14px;
             color: #4CAF50;
-            margin-top: 4px;
+            font-weight: 500;
         }
         
         .sync-status.offline {
@@ -59,11 +62,14 @@
             padding: 16px;
             margin-bottom: 12px;
             cursor: pointer;
-            transition: background 0.2s;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
         
         .delivery-card:hover {
             background: #e3f2fd;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         
         .delivery-card.active {
@@ -117,6 +123,19 @@
             align-items: center;
             justify-content: center;
             gap: 8px;
+            transition: all 0.2s;
+            height: 60px;
+        }
+        
+        .add-delivery:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+        
+        .add-delivery:active {
+            background: #1565C0;
+            transform: translateY(0);
         }
         
         .bottom-nav {
@@ -193,7 +212,7 @@
             </div>
             
             <button class="add-delivery">
-                ➕ Start New Delivery
+                📦 Start New Delivery
             </button>
             
             <div class="bottom-nav">
@@ -224,7 +243,7 @@
             </div>
             
             <button class="add-delivery">
-                ➕ Start New Delivery
+                📦 Start New Delivery
             </button>
             
             <div class="bottom-nav">
@@ -260,7 +279,7 @@
             </div>
             
             <button class="add-delivery" style="margin-top: 40px;">
-                + NEW DELIVERY
+                📦 NEW DELIVERY
             </button>
         </div>
     </div>
@@ -279,5 +298,65 @@
             });
         });
     </script>
+
+    <!-- 
+    REACT CONVERSION NOTES for RedwoodSDK (RSC):
+    
+    COMPONENT BREAKDOWN:
+    1. DashboardScreen.tsx (SERVER COMPONENT)
+       - Fetch active deliveries from database
+       - Handle sync status and offline state
+       - Pass delivery data to child components
+    
+    2. DeliveryCard.tsx (CLIENT COMPONENT)
+       - "use client" for click handlers
+       - Navigate to delivery details on click
+       - Handle hover animations
+       
+    3. SyncStatus.tsx (CLIENT COMPONENT)
+       - "use client" for real-time sync updates
+       - Display online/offline status
+       - Show pending sync count
+       
+    4. AddDeliveryButton.tsx (CLIENT COMPONENT) 
+       - "use client" for click handler
+       - Navigate to new delivery flow
+       
+    5. BottomNavigation.tsx (CLIENT COMPONENT)
+       - "use client" for navigation
+       - Handle active tab state
+    
+    SERVER FUNCTIONS NEEDED:
+    - getActiveDeliveries.ts with "use server" directive
+    - createDelivery.ts with "use server"
+    - getSyncStatus.ts with "use server"
+    - Access ctx via: import { requestInfo } from "rwsdk/worker"
+    
+    ROUTE STRUCTURE:
+    route("/dashboard", DashboardScreen)
+    route("/dashboard/new-delivery", NewDeliveryForm)
+    
+    DATABASE QUERIES:
+    - db.delivery.findMany({ where: { status: 'active' }, include: { pallets: true } })
+    - Count pallets by status for each delivery
+    - Check user permissions via ctx.user
+    
+    DATA FLOW:
+    1. Server component queries deliveries on page load
+    2. Pass delivery data as props to DeliveryCard components  
+    3. Client components handle interactions and navigation
+    4. Use Suspense for loading states during data fetching
+    
+    STATE MANAGEMENT:
+    - Server: Initial data fetching and auth checks
+    - Client: Navigation, animations, real-time sync updates
+    - Form submissions via server functions
+    
+    KEY PATTERNS:
+    - Async server components for data fetching
+    - Client components only for interactivity
+    - Pass ctx.user for permission checks
+    - Use Response.redirect() for navigation in server functions
+    -->
 </body>
 </html>

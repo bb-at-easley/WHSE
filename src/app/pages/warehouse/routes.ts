@@ -25,157 +25,193 @@ export const warehouseRoutes = [
     <title>{{title}}</title>
     <style>
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             margin: 0;
-            background: #2c2826;
-            height: 100vh;
-            overflow: hidden;
+            padding: 20px;
+            background: #f5f5f5;
         }
-        .app-container {
+        .phone {
             max-width: 400px;
             margin: 0 auto;
-            height: 100vh;
-            background: #f7f6f4;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            min-height: 80vh;
             display: flex;
             flex-direction: column;
-            border-left: 3px solid #1c1917;
-            border-right: 3px solid #1c1917;
-            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            position: relative;
         }
         .sync-indicator {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             width: 12px;
             height: 12px;
             border-radius: 50%;
-            background: #047857;
-            border: 2px solid #1c1917;
-            z-index: 10;
+            background: #FF9800;
         }
         .header {
-            background: #1c1917;
-            color: #fefefe;
-            padding: 24px;
-            border-bottom: 4px solid #b45309;
-            position: relative;
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: center;
         }
         .delivery-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0 0 8px 0;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+        .edit-delivery-button {
+            background: none;
+            border: none;
+            color: #2196F3;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        .edit-delivery-button:hover {
+            background: #e3f2fd;
+            color: #1976D2;
         }
         .delivery-status {
-            font-size: 18px;
-            color: #b45309;
-            font-weight: 600;
-            margin: 0;
+            font-size: 16px;
+            color: #2196F3;
         }
-        .main-content {
+        .recent-scans {
             flex: 1;
-            background: #fefefe;
-            margin: 16px;
+            overflow-y: auto;
+            margin: 16px 0 100px 0;
+        }
+        .scan-item {
+            padding: 12px 16px;
+            background: #f8f9fa;
             border-radius: 8px;
-            border: 2px solid #e8e6e2;
-            padding: 20px;
+            margin-bottom: 8px;
+            font-size: 16px;
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            justify-content: center;
         }
-        .scan-zone {
-            width: 200px;
-            height: 200px;
-            border: 3px dashed #b45309;
-            border-radius: 16px;
-            background: #fef3c7;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-            position: relative;
+        .scan-item:nth-child(1) {
+            background: #e8f5e8;
         }
-        .scan-icon {
-            font-size: 48px;
-            color: #b45309;
+        .pallet-id {
+            font-weight: 600;
+            color: #333;
         }
-        .scan-instruction {
-            text-align: center;
-            color: #374151;
-            font-weight: 500;
-            margin-bottom: 24px;
+        .status-stored {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+        .status-staged {
+            color: #FF9800;
+            font-weight: 600;
         }
         .bottom-actions {
-            padding: 20px;
-            background: #f9f8f6;
-            border-top: 2px solid #e8e6e2;
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         .scan-button {
-            width: 100%;
-            background: #b45309;
+            background: #2196F3;
             color: white;
-            border: 3px solid #92400e;
-            border-radius: 12px;
-            padding: 18px;
+            border: none;
+            border-radius: 16px;
             font-size: 18px;
-            font-weight: 700;
+            font-weight: bold;
             cursor: pointer;
-            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            height: 60px;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-            transition: all 0.2s;
         }
         .scan-button:hover {
-            background: #92400e;
-            transform: translateY(-1px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
         }
         .scan-button:active {
+            background: #1565C0;
             transform: translateY(0);
         }
         .back-button {
-            width: 100%;
-            background: #6b7280;
+            background: #666;
             color: white;
-            border: 2px solid #4b5563;
+            border: none;
             border-radius: 8px;
-            padding: 16px;
-            font-size: 16px;
-            font-weight: 600;
+            padding: 12px;
             cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
+            margin: 0;
         }
         .back-button:hover {
-            background: #4b5563;
+            background: #555;
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
+    <div class="phone">
         <div class="sync-indicator"></div>
-        <header class="header">
-            <h1 class="delivery-title">{{deliveryId}}</h1>
-            <div class="delivery-status">{{status}}</div>
-        </header>
+        <div style="text-align: center; margin-bottom: 20px; color: #333; font-size: 14px;">Inbound Check In</div>
         
-        <div class="main-content">
-            <div class="scan-zone">
-                <div class="scan-icon">📦</div>
+        <div class="header">
+            <div class="delivery-title">
+                <span>{{deliveryId}}</span>
+                <button class="edit-delivery-button" onclick="editDelivery()">Edit</button>
             </div>
-            <div class="scan-instruction">
-                Position barcode within scan area
+            <div class="delivery-status">
+                <strong>{{status}}</strong>
+            </div>
+        </div>
+        
+        <div class="recent-scans">
+            <div class="scan-item">
+                <span class="pallet-id">PAL-001234</span>
+                <span class="status-stored">✓ Stored</span>
+            </div>
+            <div class="scan-item">
+                <span class="pallet-id">PAL-001233</span>
+                <span class="status-staged">Staged</span>
+            </div>
+            <div class="scan-item">
+                <span class="pallet-id">PAL-001232</span>
+                <span class="status-stored">✓ Stored</span>
             </div>
         </div>
         
         <div class="bottom-actions">
-            <button class="scan-button">📷 Scan Pallet</button>
-            <button class="back-button" onclick="window.location.href='/warehouse/dashboard'">← Dashboard</button>
+            <button class="scan-button">📦 ADD PALLET</button>
+            <button class="back-button" onclick="window.location.href='/org/easley/warehouse/dashboard'">← Dashboard</button>
         </div>
     </div>
+    
+    <script>
+        function editDelivery() {
+            alert('Edit delivery details - would open modal or navigate to edit form');
+        }
+        
+        document.querySelector('.scan-button').addEventListener('click', () => {
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        });
+    </script>
 </body>
 </html>`;
     
@@ -193,54 +229,66 @@ export const warehouseRoutes = [
         <head>
           <title>Warehouse Dashboard</title>
           <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
           <style>
             body {
-              font-family: 'Inter', -apple-system, sans-serif;
-              background: #fefefe;
-              color: #2c2826;
-              padding: 20px;
+              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
               margin: 0;
+              padding: 20px;
+              background: #f5f5f5;
             }
             .container {
-              max-width: 600px;
+              max-width: 400px;
               margin: 0 auto;
-              min-height: 100vh;
+              background: white;
+              border-radius: 20px;
+              padding: 20px;
+              box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+              min-height: 80vh;
               display: flex;
               flex-direction: column;
             }
+            .sync-indicator {
+              position: absolute;
+              top: 15px;
+              right: 15px;
+              width: 12px;
+              height: 12px;
+              border-radius: 50%;
+              background: #FF9800;
+            }
             .header {
-              background: #f7f6f4;
-              padding: 24px;
+              background: #f8f9fa;
+              padding: 16px;
               border-radius: 12px;
-              margin-bottom: 24px;
+              margin-bottom: 20px;
+              position: relative;
             }
             .title {
-              font-size: 24px;
-              font-weight: 600;
-              color: #1c1917;
-              margin-bottom: 8px;
+              font-size: 20px;
+              font-weight: bold;
+              color: #333;
+              margin: 0 0 8px 0;
             }
             .subtitle {
-              color: #b45309;
-              font-weight: 500;
+              color: #2196F3;
+              font-size: 16px;
+              margin: 0;
             }
             .delivery-list {
               list-style: none;
-              margin-bottom: 24px;
-              flex: 1;
+              margin: 0;
               padding: 0;
+              flex: 1;
             }
             .delivery-item {
-              background: #f9f8f6;
-              border-radius: 12px;
-              margin-bottom: 12px;
-              padding: 20px;
-              transition: all 0.3s ease;
+              padding: 12px 16px;
+              background: #f8f9fa;
+              border-radius: 8px;
+              margin-bottom: 8px;
+              transition: all 0.2s;
             }
             .delivery-item:hover {
-              background: #f5f4f1;
-              transform: translateY(-2px);
+              background: #e3f2fd;
             }
             .delivery-link {
               text-decoration: none;
@@ -248,66 +296,89 @@ export const warehouseRoutes = [
               display: block;
             }
             .delivery-title {
-              font-size: 18px;
+              font-size: 16px;
               font-weight: 600;
-              color: #1c1917;
-              margin-bottom: 6px;
+              color: #333;
+              margin-bottom: 4px;
             }
             .delivery-status {
               font-size: 14px;
-              color: #b45309;
-              font-weight: 500;
+              color: #2196F3;
+              font-weight: 600;
+            }
+            .bottom-actions {
+              margin-top: 20px;
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
             }
             .add-delivery-btn {
-              background: #b45309;
+              background: #2196F3;
               color: white;
               border: none;
-              border-radius: 12px;
-              padding: 16px 24px;
-              font-size: 16px;
-              font-weight: 600;
+              border-radius: 16px;
+              padding: 18px;
+              font-size: 18px;
+              font-weight: bold;
               text-decoration: none;
-              display: inline-block;
-              margin-bottom: 24px;
+              text-align: center;
+              text-transform: uppercase;
+              letter-spacing: 0.5px;
+              transition: all 0.2s;
+              cursor: pointer;
+            }
+            .add-delivery-btn:hover {
+              background: #1976D2;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
             }
             .back-link {
-              background: transparent;
-              color: #6b7280;
-              border: 1px solid #d1d5db;
+              background: #666;
+              color: white;
+              border: none;
               border-radius: 8px;
-              padding: 12px 20px;
+              padding: 12px;
               text-decoration: none;
-              font-size: 14px;
               text-align: center;
-              display: block;
+              font-size: 14px;
+            }
+            .back-link:hover {
+              background: #555;
             }
           </style>
         </head>
         <body>
           <div class="container">
+            <div class="sync-indicator"></div>
             <div class="header">
               <h1 class="title">Warehouse Dashboard</h1>
-              <p class="subtitle">Active delivery management</p>
+              <div class="subtitle">Active delivery management</div>
             </div>
             
             <ul class="delivery-list">
               <li class="delivery-item">
-                <a href="/warehouse/delivery/12345" class="delivery-link">
+                <a href="/org/easley/warehouse/delivery/12345" class="delivery-link">
                   <div class="delivery-title">Delivery #12345</div>
                   <div class="delivery-status">12 scanned, 3 stored</div>
                 </a>
               </li>
               <li class="delivery-item">
-                <a href="/warehouse/delivery/12346" class="delivery-link">
+                <a href="/org/easley/warehouse/delivery/12346" class="delivery-link">
                   <div class="delivery-title">Delivery #12346</div>
                   <div class="delivery-status">8 scanned, 8 stored</div>
                 </a>
               </li>
+              <li class="delivery-item">
+                <a href="/org/easley/warehouse/delivery/12347" class="delivery-link">
+                  <div class="delivery-title">Delivery #12347</div>
+                  <div class="delivery-status">5 scanned, 2 stored</div>
+                </a>
+              </li>
             </ul>
             
-            <div style="margin-top: auto; padding-top: 32px;">
-              <a href="#" class="add-delivery-btn">+ Start New Delivery</a>
-              <a href="/" class="back-link">← Back to Home</a>
+            <div class="bottom-actions">
+              <a href="#" class="add-delivery-btn">📦 START NEW DELIVERY</a>
+              <a href="/org/easley" class="back-link">← Back to Home</a>
             </div>
           </div>
         </body>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delivery Screen - Clean Bottom Sticky</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .mockup-container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .phone {
+            width: 300px;
+            height: 600px;
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        .phone h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .sync-indicator {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FF9800;
+        }
+        
+        .header {
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        
+        .delivery-title {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .edit-delivery-button {
+            background: none;
+            border: none;
+            color: #2196F3;
+            font-size: 14px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+        
+        .edit-delivery-button:hover {
+            background: #e3f2fd;
+            color: #1976D2;
+        }
+        
+        .delivery-status {
+            font-size: 16px;
+            color: #2196F3;
+            margin-top: 8px;
+        }
+        
+        .scan-button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+            height: 60px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .scan-button:hover {
+            background: #1976D2;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+        }
+        
+        .scan-button:active {
+            background: #1565C0;
+            transform: translateY(0);
+        }
+        
+        .recent-scans {
+            flex: 1;
+            overflow-y: auto;
+            margin: 16px 0 100px 0;
+        }
+        
+        .scan-item {
+            padding: 12px 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 8px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .scan-item:nth-child(1) {
+            background: #e8f5e8;
+        }
+        
+        .pallet-id {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .status-stored {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+        
+        .status-staged {
+            color: #FF9800;
+            font-weight: 600;
+        }
+        
+        .back-button {
+            background: #666;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            margin: 0;
+        }
+        
+        /* Sticky bottom buttons */
+        .bottom-actions {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Delivery Screen - Clean Bottom Sticky</h1>
+    
+    <div class="mockup-container">
+        <!-- Bottom sticky version (clean) -->
+        <div class="phone">
+            <div class="sync-indicator"></div>
+            <h3>Inbound Check In</h3>
+            
+            <div class="header">
+                <div class="delivery-title">
+                    <span>Delivery #12345</span>
+                    <button class="edit-delivery-button" onclick="editDelivery()">Edit</button>
+                </div>
+                <div class="delivery-status">
+                    <strong>12 scanned, 3 stored</strong>
+                </div>
+            </div>
+            
+            <div class="recent-scans">
+                <!-- TODO: Handle empty state for new deliveries with no pallets added yet
+                     When deliveryData.pallets.length === 0, show:
+                     <div class="empty-state">
+                         <div style="text-align: center; color: #999; padding: 40px 20px; font-style: italic;">
+                             Start adding pallets to track this delivery
+                         </div>
+                     </div>
+                -->
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001234</span>
+                    <span class="status-stored">✓ Stored</span>
+                </div>
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001233</span>
+                    <span class="status-staged">Staged</span>
+                </div>
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001232</span>
+                    <span class="status-stored">✓ Stored</span>
+                </div>
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001231</span>
+                    <span class="status-staged">Staged</span>
+                </div>
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001230</span>
+                    <span class="status-stored">✓ Stored</span>
+                </div>
+                <div class="scan-item">
+                    <span class="pallet-id">PAL-001229</span>
+                    <span class="status-staged">Staged</span>
+                </div>
+            </div>
+            
+            <!-- Sticky bottom buttons -->
+            <div class="bottom-actions">
+                <button class="scan-button">
+                    📦 ADD PALLET
+                </button>
+                <button class="back-button">← Dashboard</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add interactivity
+        document.querySelectorAll('.scan-button').forEach((button, index) => {
+            let count = 12;
+            button.addEventListener('click', () => {
+                count++;
+                const phone = button.closest('.phone');
+                const status = phone.querySelector('.delivery-status strong');
+                status.textContent = `${count} scanned, 3 stored`;
+                
+                // Haptic feedback simulation
+                if (navigator.vibrate) {
+                    navigator.vibrate(50);
+                }
+            });
+        });
+        
+        // Edit delivery function
+        function editDelivery() {
+            // TODO: In React, this would open edit delivery modal or navigate to edit page
+            // Possible fields to edit: Delivery ID, Truck number, Expected pallet count, etc.
+            alert('Edit delivery details - would open modal or navigate to edit form');
+        }
+    </script>
+</body>
+</html>

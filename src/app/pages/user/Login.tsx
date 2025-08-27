@@ -12,7 +12,7 @@ import {
   startPasskeyRegistration,
 } from "./functions";
 
-export function Login() {
+export function Login({ organization }: { organization: { name: string; slug: string } }) {
   const [username, setUsername] = useState("");
   const [result, setResult] = useState("");
   const [isPending, startTransition] = useTransition();
@@ -30,24 +30,32 @@ export function Login() {
     if (!success) {
       setResult("Login failed");
     } else {
-      setResult("Login successful!");
+      setResult("Login successful! Redirecting...");
+      // Redirect to dashboard after successful login
+      setTimeout(() => {
+        window.location.href = `/org/${organization.slug}/warehouse/dashboard`;
+      }, 1500);
     }
   };
 
   const passkeyRegister = async () => {
     // 1. Get a challenge from the worker
-    const options = await startPasskeyRegistration(username);
+    const options = await startPasskeyRegistration(username, organization.id);
 
     // 2. Ask the browser to sign the challenge
     const registration = await startRegistration({ optionsJSON: options });
 
     // 3. Give the signed challenge to the worker to finish the registration process
-    const success = await finishPasskeyRegistration(username, registration);
+    const success = await finishPasskeyRegistration(username, registration, organization.id);
 
     if (!success) {
       setResult("Registration failed");
     } else {
-      setResult("Registration successful!");
+      setResult("Registration successful! Redirecting...");
+      // Redirect to dashboard after successful registration
+      setTimeout(() => {
+        window.location.href = `/org/${organization.slug}/warehouse/dashboard`;
+      }, 1500);
     }
   };
 
@@ -93,7 +101,7 @@ export function Login() {
             textTransform: 'uppercase',
             letterSpacing: '1px'
           }}>
-            WAREHOUSE ACCESS
+            {organization.name}
           </h1>
           <p style={{
             color: '#b45309',
@@ -103,7 +111,7 @@ export function Login() {
             textTransform: 'uppercase',
             letterSpacing: '0.5px'
           }}>
-            SECURE LOGIN
+            WAREHOUSE ACCESS
           </p>
         </div>
 
@@ -204,7 +212,7 @@ export function Login() {
           borderTop: '2px solid #e8e6e2'
         }}>
           <a 
-            href="/"
+            href={`/org/${organization.slug}`}
             style={{
               color: '#6b7280',
               textDecoration: 'none',
@@ -214,7 +222,7 @@ export function Login() {
               letterSpacing: '0.3px'
             }}
           >
-            ← BACK TO HOME
+            ← BACK TO {organization.name}
           </a>
         </div>
       </div>
