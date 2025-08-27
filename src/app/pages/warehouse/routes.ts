@@ -1,7 +1,9 @@
-import { route } from "rwsdk/router";
+import { route, render } from "rwsdk/router";
+import { Dashboard } from "./Dashboard";
 // PLACEHOLDER imports - these will be actual npm packages when addons are published
 import { BarcodeScanner } from "../../../addons/barcode-scanner/index";
 import { OfflineSync } from "../../../addons/offline-sync/index";
+
 // TODO: Replace with actual DesignPrototype addon when ready
 function serveHtml(template: string, data: any = {}) {
   let html = template;
@@ -15,8 +17,40 @@ function serveHtml(template: string, data: any = {}) {
 }
 
 export const warehouseRoutes = [
+  // Dashboard route
+  route("/dashboard", async function ({ params, ctx }) {
+    // Load organization context from parent route
+    const orgSlug = params.orgSlug;
+    if (orgSlug) {
+      const { loadOrganizationContext } = await import("@/worker");
+      const orgResult = await loadOrganizationContext(orgSlug, ctx);
+      if (orgResult) return orgResult;
+    }
+    
+    // Check membership access
+    if (!ctx.user || !ctx.membership) {
+      return new Response(null, {
+        status: 302,
+        headers: { Location: `/org/${ctx.organization?.slug}/user/login` }
+      });
+    }
+    
+    return render(Dashboard, { 
+      organization: ctx.organization,
+      user: ctx.user,
+      membership: ctx.membership
+    });
+  }),
+  
   // Serve delivery screen 
-  route("/delivery/:id", async function ({ params }) {
+  route("/delivery/:id", async function ({ params, ctx }) {
+    // Load organization context from parent route
+    const orgSlug = params.orgSlug; // This comes from the /org/:orgSlug prefix
+    if (orgSlug) {
+      const { loadOrganizationContext } = await import("@/worker");
+      const orgResult = await loadOrganizationContext(orgSlug, ctx);
+      if (orgResult) return orgResult; // Return error response if org loading failed
+    }
     const deliveryScreenHtml = `<!DOCTYPE html>
 <html lang="en">
 <head>

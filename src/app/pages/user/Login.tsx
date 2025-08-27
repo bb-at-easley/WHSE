@@ -69,73 +69,58 @@ export function Login({ organization }: { organization: { name: string; slug: st
 
   return (
     <div style={{
+      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+      margin: 0,
+      padding: '20px',
+      background: '#f5f5f5',
       minHeight: '100vh',
-      background: '#2c2826',
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
-      padding: '20px'
+      justifyContent: 'center'
     }}>
       <div style={{
-        background: '#f7f6f4',
-        padding: '0',
-        borderRadius: '8px',
-        border: '4px solid #1c1917',
-        boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+        background: 'white',
+        borderRadius: '20px',
+        padding: '40px 20px',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
         width: '100%',
-        maxWidth: '400px',
-        overflow: 'hidden'
+        maxWidth: '400px'
       }}>
         {/* Header */}
-        <div style={{
-          background: '#1c1917',
-          color: '#fefefe',
-          padding: '32px',
-          textAlign: 'center',
-          borderBottom: '4px solid #b45309'
-        }}>
+        <div style={{ textAlign: 'center', marginBottom: '32px' }}>
           <h1 style={{
-            fontSize: '28px',
-            fontWeight: '700',
-            margin: '0 0 8px 0',
-            textTransform: 'uppercase',
-            letterSpacing: '1px'
+            fontSize: '24px',
+            fontWeight: 'bold',
+            color: '#333',
+            margin: '0 0 8px 0'
           }}>
             {organization.name}
           </h1>
           <p style={{
-            color: '#b45309',
-            margin: '0',
             fontSize: '16px',
-            fontWeight: '600',
-            textTransform: 'uppercase',
-            letterSpacing: '0.5px'
+            color: '#666',
+            margin: '0'
           }}>
-            WAREHOUSE ACCESS
+            Warehouse Access
           </p>
         </div>
 
         {/* Form */}
-        <div style={{ padding: '32px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <input
             type="text"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="USERNAME"
+            placeholder="Username"
             style={{
-              width: '100%',
               padding: '16px',
               fontSize: '16px',
-              fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-              border: '3px solid #e8e6e2',
-              borderRadius: '8px',
-              background: '#fefefe',
-              color: '#1c1917',
-              marginBottom: '24px',
-              fontFamily: 'Inter, -apple-system, sans-serif',
-              boxSizing: 'border-box'
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              background: '#f8f9fa',
+              color: '#333',
+              boxSizing: 'border-box',
+              width: '100%'
             }}
           />
 
@@ -143,61 +128,52 @@ export function Login({ organization }: { organization: { name: string; slug: st
             onClick={handlePerformPasskeyLogin} 
             disabled={isPending}
             style={{
-              width: '100%',
-              background: '#b45309',
+              background: '#2196F3',
               color: 'white',
-              border: '3px solid #92400e',
-              borderRadius: '8px',
-              padding: '18px',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '16px 24px',
               fontSize: '16px',
-              fontWeight: '700',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
+              fontWeight: '600',
               cursor: isPending ? 'not-allowed' : 'pointer',
-              marginBottom: '16px',
               opacity: isPending ? '0.7' : '1',
-              boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
-              fontFamily: 'Inter, -apple-system, sans-serif'
+              transition: 'all 0.2s',
+              width: '100%'
             }}
           >
-            {isPending ? 'AUTHENTICATING...' : '🔐 LOGIN WITH PASSKEY'}
+            {isPending ? 'Authenticating...' : 'Login with Passkey'}
           </button>
 
           <button 
             onClick={handlePerformPasskeyRegister} 
-            disabled={isPending}
+            disabled={isPending || !username.trim()}
             style={{
-              width: '100%',
-              background: '#6b7280',
-              color: 'white',
-              border: '2px solid #4b5563',
-              borderRadius: '8px',
-              padding: '16px',
-              fontSize: '14px',
+              background: '#f8f9fa',
+              color: '#333',
+              border: '1px solid #e0e0e0',
+              borderRadius: '12px',
+              padding: '16px 24px',
+              fontSize: '16px',
               fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '0.3px',
-              cursor: isPending ? 'not-allowed' : 'pointer',
-              marginBottom: '16px',
-              opacity: isPending ? '0.7' : '1',
-              fontFamily: 'Inter, -apple-system, sans-serif'
+              cursor: (isPending || !username.trim()) ? 'not-allowed' : 'pointer',
+              opacity: (isPending || !username.trim()) ? '0.7' : '1',
+              transition: 'all 0.2s',
+              width: '100%'
             }}
           >
-            {isPending ? 'REGISTERING...' : '➕ REGISTER NEW USER'}
+            {isPending ? 'Registering...' : 'Register New User'}
           </button>
 
           {result && (
             <div style={{
               padding: '16px',
-              background: result.includes('successful') ? '#d1fae5' : '#fee2e2',
-              color: result.includes('successful') ? '#047857' : '#dc2626',
-              border: `2px solid ${result.includes('successful') ? '#047857' : '#dc2626'}`,
-              borderRadius: '8px',
+              background: result.includes('successful') ? '#e8f5e8' : '#fee2e2',
+              color: result.includes('successful') ? '#4CAF50' : '#dc2626',
+              borderRadius: '12px',
               textAlign: 'center',
+              fontSize: '14px',
               fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-              fontSize: '14px'
+              marginTop: '8px'
             }}>
               {result}
             </div>
@@ -206,23 +182,21 @@ export function Login({ organization }: { organization: { name: string; slug: st
 
         {/* Footer */}
         <div style={{
-          background: '#f9f8f6',
-          padding: '20px',
           textAlign: 'center',
-          borderTop: '2px solid #e8e6e2'
+          marginTop: '32px',
+          paddingTop: '24px',
+          borderTop: '1px solid #f0f0f0'
         }}>
           <a 
-            href={`/org/${organization.slug}`}
+            href="/"
             style={{
-              color: '#6b7280',
+              color: '#666',
               textDecoration: 'none',
               fontSize: '14px',
-              fontWeight: '600',
-              textTransform: 'uppercase',
-              letterSpacing: '0.3px'
+              fontWeight: '600'
             }}
           >
-            ← BACK TO {organization.name}
+            ← Back to Home
           </a>
         </div>
       </div>

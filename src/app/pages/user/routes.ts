@@ -1,13 +1,17 @@
-import { route } from "rwsdk/router";
+import { route, render } from "rwsdk/router";
 import { Login } from "./Login";
 import { sessions } from "@/session/store";
 import { db } from "@/db";
 
 // Organization-aware user routes (nested under /org/:orgSlug/user)
 export const userRoutes = [
-  route("/login", function ({ ctx }) {
-    const LoginWithProps = () => Login({ organization: ctx.organization });
-    return LoginWithProps();
+  route("/login", async function ({ ctx, params }) {
+    // Load organization context 
+    const { loadOrganizationContext } = await import("@/worker");
+    const orgResult = await loadOrganizationContext(params.orgSlug, ctx);
+    if (orgResult) return orgResult; // Return error if org loading failed
+    
+    return render(Login, { organization: ctx.organization });
   }), // Now /org/:orgSlug/user/login
   
   route("/logout", async function ({ request }) {

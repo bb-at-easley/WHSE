@@ -23,13 +23,14 @@ datasource db {
 
 model User {
   id          String      @id @default(uuid()) // User ID (UUID-based)
-  username    String      @unique
-  email       String?     @unique // Optional email for invitations
+  fullName    String      // User's display name  
+  email       String      @unique // Email as login identifier
+  passwordHash String?     // Optional for transition period - users can have password OR passkey
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
   // Relations
-  credentials Credential[] // WebAuthn credentials
+  credentials Credential[] // WebAuthn credentials (for future passkey upgrade)
   memberships Membership[] // Organization memberships
   invitedUsers Membership[] @relation("InvitedBy") // Users this user invited
 }
