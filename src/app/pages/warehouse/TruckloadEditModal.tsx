@@ -134,7 +134,7 @@ export function TruckloadEditModal({ delivery, onClose, onSave }: TruckloadEditM
               type="text"
               value={formData.easleyProNumber}
               onChange={(e) => setFormData(prev => ({ ...prev, easleyProNumber: e.target.value }))}
-              placeholder="From TMS"
+              placeholder="Enter order number"
               style={{
                 width: '100%',
                 padding: '12px 16px',
@@ -161,7 +161,7 @@ export function TruckloadEditModal({ delivery, onClose, onSave }: TruckloadEditM
               type="text"
               value={formData.truckNumber}
               onChange={(e) => setFormData(prev => ({ ...prev, truckNumber: e.target.value }))}
-              placeholder="TR-4471"
+              placeholder="Enter truck number"
               style={{
                 width: '100%',
                 padding: '12px 16px',
@@ -188,7 +188,7 @@ export function TruckloadEditModal({ delivery, onClose, onSave }: TruckloadEditM
               type="text"
               value={formData.trailerNumber}
               onChange={(e) => setFormData(prev => ({ ...prev, trailerNumber: e.target.value }))}
-              placeholder="From BOL"
+              placeholder="Enter trailer number"
               style={{
                 width: '100%',
                 padding: '12px 16px',
@@ -215,7 +215,7 @@ export function TruckloadEditModal({ delivery, onClose, onSave }: TruckloadEditM
               type="text"
               value={formData.sealNumber}
               onChange={(e) => setFormData(prev => ({ ...prev, sealNumber: e.target.value }))}
-              placeholder="From BOL"
+              placeholder="Enter seal number"
               style={{
                 width: '100%',
                 padding: '12px 16px',
@@ -242,7 +242,7 @@ export function TruckloadEditModal({ delivery, onClose, onSave }: TruckloadEditM
               type="text"
               value={formData.bolNumber}
               onChange={(e) => setFormData(prev => ({ ...prev, bolNumber: e.target.value }))}
-              placeholder="From BOL"
+              placeholder="Enter BOL number"
               style={{
                 width: '100%',
                 padding: '12px 16px',
