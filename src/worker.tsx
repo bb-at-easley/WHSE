@@ -6,6 +6,9 @@ import { Landing } from "@/app/pages/Landing";
 import { Signup } from "@/app/pages/Signup";
 import { LoginSimple } from "@/app/pages/LoginSimple";
 import { Login } from "@/app/pages/user/Login";
+import { WarehouseDashboard } from "@/app/pages/warehouse/WarehouseDashboardServer";
+import { DeliveryScreen } from "@/app/pages/warehouse/DeliveryScreen";
+import { createDelivery } from "@/app/pages/warehouse/actions";
 import { setCommonHeaders } from "@/app/headers";
 import { userRoutes } from "@/app/pages/user/routes";
 import { warehouseRoutes } from "@/app/pages/warehouse/routes";
@@ -108,7 +111,7 @@ export default defineApp([
     route("/signup", Signup),
     route("/login", LoginSimple),
     
-    // Simple warehouse dashboard (protected)
+    // Warehouse dashboard (protected)
     route("/warehouse/dashboard", async ({ ctx }) => {
       if (!ctx.user) {
         return new Response(null, {
@@ -117,44 +120,36 @@ export default defineApp([
         });
       }
       
-      return (
-        <div style={{
-          fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-          padding: '20px',
-          background: '#f5f5f5',
-          minHeight: '100vh'
-        }}>
-          <div style={{
-            background: 'white',
-            borderRadius: '20px',
-            padding: '40px 20px',
-            boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-            maxWidth: '600px',
-            margin: '0 auto'
-          }}>
-            <h1 style={{ color: '#333', marginBottom: '20px' }}>Warehouse Dashboard</h1>
-            <p style={{ color: '#666' }}>Welcome, {ctx.user.fullName}!</p>
-            <p style={{ color: '#666' }}>Email: {ctx.user.email}</p>
-            
-            <div style={{ marginTop: '32px' }}>
-              <a 
-                href="/logout"
-                style={{
-                  background: '#f8f9fa',
-                  color: '#333',
-                  border: '1px solid #e0e0e0',
-                  borderRadius: '12px',
-                  padding: '12px 24px',
-                  textDecoration: 'none',
-                  display: 'inline-block'
-                }}
-              >
-                Logout
-              </a>
-            </div>
-          </div>
-        </div>
-      );
+      return <WarehouseDashboard user={ctx.user} />;
+    }),
+    
+    // New truckload route - creates delivery and redirects to truckload screen
+    route("/warehouse/delivery/new", async ({ ctx }) => {
+      if (!ctx.user) {
+        return new Response(null, {
+          status: 302,
+          headers: { Location: "/" }
+        });
+      }
+      
+      const delivery = await createDelivery();
+      
+      return new Response(null, {
+        status: 302,
+        headers: { Location: `/warehouse/delivery/${delivery.id}` }
+      });
+    }),
+    
+    // Truckload detail screen
+    route("/warehouse/delivery/:id", async ({ ctx, params }) => {
+      if (!ctx.user) {
+        return new Response(null, {
+          status: 302,
+          headers: { Location: "/" }
+        });
+      }
+      
+      return <DeliveryScreen deliveryId={params.id} />;
     }),
     
     // Logout route

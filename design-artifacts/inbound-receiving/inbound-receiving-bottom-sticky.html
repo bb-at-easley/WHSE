@@ -304,47 +304,52 @@
     </script>
 
     <!-- 
-    REACT CONVERSION NOTES for RedwoodSDK (RSC):
+    RSC CONVERSION PLAN:
     
-    COMPONENT BREAKDOWN:
-    1. InboundReceivingScreen.tsx (CLIENT COMPONENT - needs interactivity)
-       - "use client" directive at top
-       - Handle scan button clicks, state management
-       - Manage pallets list and empty state
-       - Haptic feedback
+    MAIN ROUTE: route("/warehouse/delivery/new", NewDeliveryScreen) or route("/warehouse/delivery/:id", DeliveryScreen)
     
+    COMPONENT ARCHITECTURE:
+    
+    1. DeliveryScreen.tsx (SERVER COMPONENT - ROOT)
+       - Fetch delivery data from DB: await db.delivery.findUnique({ include: { pallets: true } })
+       - Pass deliveryData to child components
+       - Handle auth check via ctx.user
+       
     2. DeliveryHeader.tsx (SERVER COMPONENT)
-       - Display delivery info, status
-       - Take delivery data as props
+       - Shows truck #, status, pallet count
+       - Pure display, no interactivity
        
-    3. PalletList.tsx (SERVER COMPONENT)  
-       - Render list of pallets or empty state
-       - Take pallets array as props
+    3. SyncIndicator.tsx (CLIENT COMPONENT - needs real-time)
+       - "use client" - shows online/offline status
+       - Check navigator.onLine, handle connection changes
        
-    4. ScanButton.tsx (CLIENT COMPONENT)
-       - "use client" for click handlers
-       - Emit events to parent component
+    4. PalletList.tsx (SERVER COMPONENT) 
+       - Renders list of pallets or empty state
+       - Takes pallets[] from server data
+       
+    5. ActionButtons.tsx (CLIENT COMPONENT - interactivity)
+       - "use client" - ADD PALLET button, back navigation
+       - onClick handlers, haptic feedback
+       - Call server functions for mutations
     
-    SERVER FUNCTIONS NEEDED:
-    - addPallet.ts with "use server" directive
-    - updateDeliveryStatus.ts with "use server"
-    - Access ctx via: import { requestInfo } from "rwsdk/worker"
+    SERVER FUNCTIONS (/warehouse/delivery/actions.ts):
+    "use server"
+    - createDelivery(truckNumber) -> creates new delivery, returns ID
+    - addPallet(deliveryId, palletId) -> adds pallet to delivery
+    - updateDeliveryStatus(deliveryId, status) -> updates delivery
+    - Access ctx via: const { ctx } = requestInfo
     
-    ROUTE STRUCTURE:
-    route("/receiving/new", InboundReceivingScreen)
-    route("/receiving/:deliveryId", InboundReceivingScreen)
+    DATA MODEL NEEDS:
+    - Delivery table: id, truckNumber, status, createdAt, userId
+    - Pallet table: id, deliveryId, palletId, status, scannedAt
     
-    DATA FLOW:
-    1. Server component fetches delivery data on load
-    2. Client component manages local state for scans
-    3. Server functions handle database updates
-    4. Use Suspense boundaries for loading states
-    
-    KEY PATTERNS:
-    - Keep server components as default
-    - Only use client components for interactivity
-    - Pass ctx through props to child components
-    - Use server functions for mutations
+    FLOW:
+    1. Click "Start New Delivery" on dashboard
+    2. Navigate to /warehouse/delivery/new 
+    3. Server component loads empty delivery state
+    4. Client button handles ADD PALLET clicks
+    5. Server function adds pallet to DB
+    6. Page refresh shows updated state
     -->
 </body>
 </html>

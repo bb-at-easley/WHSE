@@ -33,6 +33,7 @@ model User {
   credentials Credential[] // WebAuthn credentials (for future passkey upgrade)
   memberships Membership[] // Organization memberships
   invitedUsers Membership[] @relation("InvitedBy") // Users this user invited
+  deliveries  Delivery[]   // Deliveries started by this user
 }
 
 model Credential {
@@ -86,4 +87,76 @@ enum Role {
   MANAGER
   MEMBER
   VIEWER
+}
+
+// Warehouse models for truckload management
+
+model Delivery {
+  id            String   @id @default(uuid())
+  easleyProNumber String? // Easley Pro # from TMS (Order Number)
+  truckNumber   String?  // Optional truck identifier (e.g., "TR-4471")
+  trailerNumber String?  // Trailer number from BOL
+  sealNumber    String?  // Seal number from BOL
+  bolNumber     String?  // Bill of Lading number
+  notes         String?  // General notes about this truckload
+  status        DeliveryStatus @default(ACTIVE)
+  userId        String   // Who started this delivery
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relations
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pallets Pallet[]
+  
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt]) // For dashboard sorting
+}
+
+model Pallet {
+  id            String      @id @default(uuid())
+  licensePlate  String      // LP - License Plate identifier (e.g., "123456")
+  deliveryId    String      // Which truckload this belongs to
+  status        PalletStatus @default(RECEIVED)
+  location      String?     // Storage location (e.g., "A-12-3")
+  pieceCount    Int?        // Number of pieces on this pallet
+  notes         String?     // Pallet-specific notes (damage, etc)
+  scannedAt     DateTime    @default(now())
+  
+  // Relations
+  delivery Delivery @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+  pieces   Piece[]
+  
+  @@index([deliveryId])
+  @@index([licensePlate])
+}
+
+model Piece {
+  id             String   @id @default(uuid())
+  palletId       String   // Which pallet this piece belongs to
+  partNumber     String   // Part number (e.g., "2912-20")
+  description    String   // Part description (e.g., "Mitre saws")
+  poNumber       String?  // PO number (e.g., "320425770")
+  quantity       Int?     // Quantity of this part
+  barcode        String?  // Barcode on the piece label
+  notes          String?  // Piece-specific notes (damage, open box, etc)
+  createdAt      DateTime @default(now())
+  
+  // Relations
+  pallet Pallet @relation(fields: [palletId], references: [id], onDelete: Cascade)
+  
+  @@index([palletId])
+  @@index([partNumber])
+}
+
+enum DeliveryStatus {
+  ACTIVE      // Currently receiving pallets
+  COMPLETED   // All pallets received and stored
+  PAUSED      // Temporarily stopped
+}
+
+enum PalletStatus {
+  RECEIVED    // Pallet scanned and confirmed
+  STAGED      // Pallet waiting for storage location
+  STORED      // Pallet placed in final location
 }
