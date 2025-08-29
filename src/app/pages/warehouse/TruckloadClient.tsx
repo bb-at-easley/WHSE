@@ -5,6 +5,7 @@ import { DeliveryHeader } from "./DeliveryHeader";
 import { SyncIndicator } from "./SyncIndicator";
 import { PalletList } from "./PalletList";
 import { ActionButtons } from "./ActionButtons";
+import { PalletModal } from "./PalletModal";
 
 type TruckloadClientProps = {
   delivery: {
@@ -30,11 +31,13 @@ type TruckloadClientProps = {
   };
 };
 
+type PalletType = TruckloadClientProps['delivery']['pallets'][0];
+
 export function TruckloadClient({ delivery }: TruckloadClientProps) {
   const [showPalletModal, setShowPalletModal] = useState(false);
-  const [editingPallet, setEditingPallet] = useState(null);
+  const [editingPallet, setEditingPallet] = useState<PalletType | null>(null);
 
-  const handlePalletClick = (pallet) => {
+  const handlePalletClick = (pallet: PalletType) => {
     setEditingPallet(pallet);
     setShowPalletModal(true);
   };
@@ -74,12 +77,21 @@ export function TruckloadClient({ delivery }: TruckloadClientProps) {
       
       <DeliveryHeader delivery={delivery} />
       <PalletList pallets={delivery.pallets} onPalletClick={handlePalletClick} />
-      <ActionButtons 
-        deliveryId={delivery.id} 
-        showModal={showPalletModal}
-        editingPallet={editingPallet}
-        onShowModal={handleAddPallet}
-        onCloseModal={handleModalClose}
+      <ActionButtons deliveryId={delivery.id} />
+      
+      <PalletModal
+        isOpen={showPalletModal}
+        onClose={handleModalClose}
+        deliveryId={delivery.id}
+        mode={editingPallet ? "edit" : "add"}
+        initialData={editingPallet ? {
+          id: editingPallet.id,
+          licensePlate: editingPallet.licensePlate,
+          location: editingPallet.location || undefined,
+          pieceCount: editingPallet.pieceCount || undefined,
+          partNumber: editingPallet.pieces?.[0]?.partNumber,
+          partDescription: editingPallet.pieces?.[0]?.description
+        } : undefined}
       />
     </div>
   );

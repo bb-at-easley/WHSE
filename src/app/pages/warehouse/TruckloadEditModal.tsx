@@ -35,7 +35,7 @@ export function TruckloadEditModal({ delivery, onClose, onSave }: TruckloadEditM
       await onSave(formData);
       onClose();
     } catch (error) {
-      alert(`Error updating truckload: ${error.message}`);
+      alert(`Error updating truckload: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
     setIsLoading(false);
   };
@@ -46,7 +46,7 @@ export function TruckloadEditModal({ delivery, onClose, onSave }: TruckloadEditM
       await onSave({ ...formData, status: "COMPLETED" });
       onClose();
     } catch (error) {
-      alert(`Error marking complete: ${error.message}`);
+      alert(`Error marking complete: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
     setIsLoading(false);
   };
