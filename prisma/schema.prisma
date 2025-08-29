@@ -115,7 +115,7 @@ model Delivery {
 
 model Pallet {
   id            String      @id @default(uuid())
-  licensePlate  String      // LP - License Plate identifier (e.g., "123456")
+  licensePlate  String?     // LP - License Plate identifier (e.g., "123456") - Optional
   deliveryId    String      // Which truckload this belongs to
   status        PalletStatus @default(RECEIVED)
   location      String?     // Storage location (e.g., "A-12-3")

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { addPallet, updatePallet } from "./actions";
+import { useBarcodeScanner, warehouseValidators } from "../../../../addons/barcode-scanner";
 
 type PalletData = {
   id?: string;
@@ -27,6 +28,9 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
   const [partDescription, setPartDescription] = useState("");
   const [pieceCount, setPieceCount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  
+  // Initialize barcode scanner
+  const { scan, isScanning, error: scanError, clearError } = useBarcodeScanner();
 
   // Pre-fill form when editing or duplicating
   useEffect(() => {
@@ -47,13 +51,42 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
     }
   }, [mode, initialData, isOpen]);
 
-  const handleScanLP = () => {
-    // Generate LP for demo - TODO: integrate with barcode scanner
-    const scannedLP = String(Math.floor(Math.random() * 999999) + 100000);
-    setLicensePlate(scannedLP);
-    
-    if ('vibrate' in navigator) {
-      navigator.vibrate(30);
+  const handleScanLP = async () => {
+    try {
+      // Clear any previous scan errors
+      clearError();
+      
+      // Start barcode scan with license plate focus
+      const result = await scan({
+        formats: ['CODE_128', 'QR_CODE'], // LP codes are usually CODE_128, but include QR as fallback
+        timeout: 15000, // 15 second timeout
+        hapticFeedback: true,
+        camera: { facingMode: 'environment' } // Use rear camera for warehouse scanning
+      });
+      
+      // Validate the scanned data as a license plate
+      if (warehouseValidators.licensePlate(result.data)) {
+        setLicensePlate(result.data.toUpperCase());
+      } else {
+        // If not a valid LP format, still set it but warn user
+        setLicensePlate(result.data.toUpperCase());
+        alert(`Scanned: ${result.data}\n\nNote: This doesn't match expected license plate format, but has been entered. Expected format: 6-8 alphanumeric characters.`);
+      }
+      
+    } catch (scanError: any) {
+      // Handle different types of scan errors
+      console.log('Scan failed:', scanError.message);
+      
+      if (scanError.code === 'SCAN_CANCELLED') {
+        // User cancelled, no need to show error
+        return;
+      } else if (scanError.code === 'PERMISSION_DENIED') {
+        alert('Camera permission required for scanning. Please enable camera access and try again.');
+      } else if (scanError.code === 'TIMEOUT') {
+        alert('Scan timed out. Please try again or enter the license plate manually.');
+      } else {
+        alert(`Scan failed: ${scanError.userMessage || scanError.message}\n\nYou can enter the license plate manually.`);
+      }
     }
   };
 
@@ -71,8 +104,15 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
   };
 
   const handleSubmit = async () => {
-    if (!licensePlate.trim()) {
-      alert("Please enter a License Plate (LP)");
+    // Require at least one field to be filled
+    const hasLicensePlate = licensePlate.trim();
+    const hasLocation = location.trim();
+    const hasPartNumber = partNumber.trim();
+    const hasPartDescription = partDescription.trim();
+    const hasPieceCount = pieceCount.trim();
+    
+    if (!hasLicensePlate && !hasLocation && !hasPartNumber && !hasPartDescription && !hasPieceCount) {
+      alert("Please enter at least one piece of information about the pallet (License Plate, Location, Part Number, Part Description, or Piece Count)");
       return;
     }
 
@@ -97,10 +137,9 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
         });
       }
 
-      // Check if server returned an error response
-      if (result instanceof Response && !result.ok) {
-        const errorData = await result.json();
-        throw new Error(errorData.error || 'Server error');
+      // Check if server action returned an error object
+      if (result && typeof result === 'object' && 'error' in result) {
+        throw new Error(result.error);
       }
       
       // Haptic feedback if available
@@ -111,7 +150,11 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
       onClose();
       window.location.reload();
     } catch (error) {
+      // Show error but keep form open with all data intact
       alert(`Error ${mode === "add" ? "adding" : "updating"} pallet: ${error.message}`);
+      setIsLoading(false);
+      // Don't close modal, don't clear form data
+      return;
     }
     setIsLoading(false);
   };
@@ -201,7 +244,7 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
               marginBottom: '8px',
               color: '#333'
             }}>
-              License Plate (LP)
+              License Plate (LP) - Optional
             </label>
             <div style={{
               display: 'flex',
@@ -226,20 +269,22 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
               />
               <button 
                 onClick={handleScanLP}
+                disabled={isScanning}
                 style={{
                   padding: '12px',
                   border: 'none',
                   borderRadius: '12px',
-                  background: '#6b7280',
+                  background: isScanning ? '#90CAF9' : '#6b7280',
                   color: 'white',
-                  cursor: 'pointer',
+                  cursor: isScanning ? 'not-allowed' : 'pointer',
                   fontSize: '14px',
                   transition: 'all 0.2s',
                   minWidth: '48px',
                   fontWeight: 'bold'
                 }}
+                title={isScanning ? 'Scanning...' : 'Scan license plate with camera'}
               >
-                📷
+                {isScanning ? '📹' : '📷'}
               </button>
             </div>
           </div>

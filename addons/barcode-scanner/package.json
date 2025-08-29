@@ -21,7 +21,11 @@
     "url": "https://github.com/redwoodjs/rwsdk-addons.git",
     "directory": "packages/barcode-scanner"
   },
+  "dependencies": {
+    "qr-scanner": "^1.4.2"
+  },
   "peerDependencies": {
+    "react": ">=18.0.0",
     "rwsdk": ">=0.1.0"
   },
   "devDependencies": {

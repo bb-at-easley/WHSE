@@ -21,7 +21,9 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@generated/*": ["./generated/*"]
+      "@generated/*": ["./generated/*"],
+      "../../../addons/barcode-scanner": ["./addons/barcode-scanner/index.ts"],
+      "../../../addons/barcode-scanner/*": ["./addons/barcode-scanner/*"]
     },
     /* Enable importing .json files */
     "resolveJsonModule": true,

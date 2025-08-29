@@ -31,19 +31,21 @@ export async function addPallet(deliveryId: string, licensePlate: string, locati
   const { ctx } = requestInfo;
   
   if (!ctx.user) {
-    return Response.json({ error: "User not authenticated" }, { status: 401 });
+    return { error: "User not authenticated" };
   }
 
-  // Check if LP already exists
-  const existingPallet = await db.pallet.findFirst({
-    where: { licensePlate },
-    include: { delivery: true }
-  });
+  // Check if LP already exists (only if LP is provided and not empty)
+  if (licensePlate && licensePlate.trim()) {
+    const existingPallet = await db.pallet.findFirst({
+      where: { 
+        licensePlate: licensePlate.trim() 
+      },
+      include: { delivery: true }
+    });
 
-  if (existingPallet) {
-    return Response.json({ 
-      error: `License Plate ${licensePlate} already exists in delivery ${existingPallet.delivery?.easleyProNumber || existingPallet.deliveryId}` 
-    }, { status: 400 });
+    if (existingPallet) {
+      return { error: `License Plate ${licensePlate} already exists in delivery ${existingPallet.delivery?.easleyProNumber || existingPallet.deliveryId}` };
+    }
   }
 
   // Determine status based on whether location is provided
@@ -51,9 +53,9 @@ export async function addPallet(deliveryId: string, licensePlate: string, locati
 
   const pallet = await db.pallet.create({
     data: {
-      licensePlate,
+      licensePlate: licensePlate && licensePlate.trim() ? licensePlate.trim() : null, // Allow null LP, trim if provided
       deliveryId,
-      location,
+      location: location && location.trim() ? location.trim() : null,
       status,
       pieceCount: pieceData?.pieceCount
     }
@@ -171,22 +173,22 @@ export async function updatePallet(palletId: string, data: {
   const { ctx } = requestInfo;
   
   if (!ctx.user) {
-    return Response.json({ error: "User not authenticated" }, { status: 401 });
+    return { error: "User not authenticated" };
   }
 
-  // Check if LP already exists on a different pallet
-  const existingPallet = await db.pallet.findFirst({
-    where: { 
-      licensePlate: data.licensePlate,
-      NOT: { id: palletId } // Exclude current pallet
-    },
-    include: { delivery: true }
-  });
+  // Check if LP already exists on a different pallet (only if LP is provided and not empty)
+  if (data.licensePlate && data.licensePlate.trim()) {
+    const existingPallet = await db.pallet.findFirst({
+      where: { 
+        licensePlate: data.licensePlate.trim(),
+        NOT: { id: palletId } // Exclude current pallet
+      },
+      include: { delivery: true }
+    });
 
-  if (existingPallet) {
-    return Response.json({ 
-      error: `License Plate ${data.licensePlate} already exists in delivery ${existingPallet.delivery?.easleyProNumber || existingPallet.deliveryId}` 
-    }, { status: 400 });
+    if (existingPallet) {
+      return { error: `License Plate ${data.licensePlate} already exists in delivery ${existingPallet.delivery?.easleyProNumber || existingPallet.deliveryId}` };
+    }
   }
 
   // Update pallet
@@ -195,8 +197,8 @@ export async function updatePallet(palletId: string, data: {
   const pallet = await db.pallet.update({
     where: { id: palletId },
     data: {
-      licensePlate: data.licensePlate,
-      location: data.location || null,
+      licensePlate: data.licensePlate && data.licensePlate.trim() ? data.licensePlate.trim() : null, // Allow null LP, trim if provided
+      location: data.location && data.location.trim() ? data.location.trim() : null,
       status,
       pieceCount: data.pieceCount || null
     }
