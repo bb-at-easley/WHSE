@@ -38,12 +38,24 @@ export function TruckloadClient({ delivery }: TruckloadClientProps) {
   const [editingPallet, setEditingPallet] = useState<PalletType | null>(null);
 
   const handlePalletClick = (pallet: PalletType) => {
+    console.log("Pallet data:", pallet);
+    console.log("Pieces:", pallet.pieces);
     setEditingPallet(pallet);
     setShowPalletModal(true);
   };
 
   const handleAddPallet = () => {
     setEditingPallet(null);
+    setShowPalletModal(true);
+  };
+
+  const handleDuplicatePallet = (pallet: PalletType) => {
+    console.log("Duplicating pallet:", pallet);
+    // Set the pallet as template but clear the ID so it creates a new one
+    setEditingPallet({
+      ...pallet,
+      id: undefined // Clear ID so it creates new pallet
+    });
     setShowPalletModal(true);
   };
 
@@ -76,14 +88,18 @@ export function TruckloadClient({ delivery }: TruckloadClientProps) {
       </h3>
       
       <DeliveryHeader delivery={delivery} />
-      <PalletList pallets={delivery.pallets} onPalletClick={handlePalletClick} />
+      <PalletList 
+        pallets={delivery.pallets} 
+        onPalletClick={handlePalletClick}
+        onDuplicatePallet={handleDuplicatePallet}
+      />
       <ActionButtons deliveryId={delivery.id} />
       
       <PalletModal
         isOpen={showPalletModal}
         onClose={handleModalClose}
         deliveryId={delivery.id}
-        mode={editingPallet ? "edit" : "add"}
+        mode={editingPallet?.id ? "edit" : "add"}
         initialData={editingPallet ? {
           id: editingPallet.id,
           licensePlate: editingPallet.licensePlate,

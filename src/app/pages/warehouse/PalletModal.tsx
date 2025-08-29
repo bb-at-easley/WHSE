@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { addPallet } from "./actions";
+import { addPallet, updatePallet } from "./actions";
 
 type PalletData = {
   id?: string;
@@ -28,16 +28,17 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
   const [pieceCount, setPieceCount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Pre-fill form when editing
+  // Pre-fill form when editing or duplicating
   useEffect(() => {
-    if (mode === "edit" && initialData) {
+    if (initialData) {
+      // Pre-fill with initial data (for both edit and duplicate)
       setLicensePlate(initialData.licensePlate || "");
       setLocation(initialData.location || "");
       setPartNumber(initialData.partNumber || "");
       setPartDescription(initialData.partDescription || "");
       setPieceCount(initialData.pieceCount ? String(initialData.pieceCount) : "");
     } else {
-      // Clear form for add mode
+      // Clear form when no initial data (new pallet)
       setLicensePlate("");
       setLocation("");
       setPartNumber("");
@@ -86,8 +87,13 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
       if (mode === "add") {
         await addPallet(deliveryId, licensePlate, location || undefined, pieceData);
       } else {
-        // TODO: Create updatePallet action
-        console.log("Update pallet:", { id: initialData?.id, licensePlate, location, pieceData });
+        await updatePallet(initialData!.id!, {
+          licensePlate,
+          location: location || undefined,
+          partNumber: pieceData.partNumber,
+          partDescription: pieceData.partDescription,
+          pieceCount: pieceData.pieceCount
+        });
       }
       
       // Haptic feedback if available
@@ -401,19 +407,17 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
             {isLoading ? loadingText : submitText}
           </button>
         </div>
-      </div>
-
-      {/* Backdrop hint */}
-      <div style={{
-        position: 'absolute',
-        bottom: '100px',
-        left: '50%',
-        transform: 'translateX(-50%)',
-        fontSize: '12px',
-        color: 'rgba(255, 255, 255, 0.8)',
-        textAlign: 'center'
-      }}>
-        Tap outside to close
+        
+        {/* Backdrop hint */}
+        <div style={{
+          fontSize: '12px',
+          color: '#999',
+          textAlign: 'center',
+          padding: '10px 20px',
+          borderTop: '1px solid #eee'
+        }}>
+          Tap outside to close
+        </div>
       </div>
     </div>
   );

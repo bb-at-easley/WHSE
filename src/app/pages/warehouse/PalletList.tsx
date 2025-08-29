@@ -18,9 +18,10 @@ type Pallet = {
 type PalletListProps = {
   pallets: Pallet[];
   onPalletClick?: (pallet: Pallet) => void;
+  onDuplicatePallet?: (pallet: Pallet) => void;
 };
 
-export function PalletList({ pallets, onPalletClick }: PalletListProps) {
+export function PalletList({ pallets, onPalletClick, onDuplicatePallet }: PalletListProps) {
   if (pallets.length === 0) {
     return (
       <div style={{
@@ -77,14 +78,21 @@ export function PalletList({ pallets, onPalletClick }: PalletListProps) {
             </span>
           </div>
           
-          {/* Bottom row - piece info if available */}
-          {(pallet.pieces?.length || pallet.pieceCount) && (
+          {/* Bottom row - piece info and actions */}
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginTop: '8px'
+          }}>
+            {/* Piece info or spacer */}
             <div style={{
               fontSize: '12px',
               color: '#666',
               display: 'flex',
               gap: '12px',
-              alignItems: 'center'
+              alignItems: 'center',
+              flex: 1
             }}>
               {pallet.pieceCount && (
                 <span>{pallet.pieceCount} pieces</span>
@@ -93,7 +101,41 @@ export function PalletList({ pallets, onPalletClick }: PalletListProps) {
                 <span>{pallet.pieces[0].partNumber} - {pallet.pieces[0].description}</span>
               )}
             </div>
-          )}
+            
+            {/* Duplicate button - always on the right */}
+            {onDuplicatePallet && (
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent triggering pallet click
+                  onDuplicatePallet(pallet);
+                }}
+                style={{
+                  background: '#2196F3',
+                  color: 'white',
+                  border: 'none',
+                  borderRadius: '6px',
+                  padding: '4px 8px',
+                  fontSize: '12px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  transition: 'all 0.2s'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#1976D2';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#2196F3';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                📋 Duplicate
+              </button>
+            )}
+          </div>
         </div>
       ))}
     </div>

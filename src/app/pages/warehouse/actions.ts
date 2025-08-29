@@ -157,3 +157,60 @@ export async function getDelivery(deliveryId: string) {
 
   return delivery;
 }
+
+export async function updatePallet(palletId: string, data: {
+  licensePlate: string;
+  location?: string;
+  partNumber?: string;
+  partDescription?: string;
+  pieceCount?: number;
+}) {
+  const { ctx } = requestInfo;
+  
+  if (!ctx.user) {
+    throw new Error("User not authenticated");
+  }
+
+  // Update pallet
+  const status = data.location ? "STORED" : "RECEIVED";
+  
+  const pallet = await db.pallet.update({
+    where: { id: palletId },
+    data: {
+      licensePlate: data.licensePlate,
+      location: data.location || null,
+      status,
+      pieceCount: data.pieceCount || null
+    }
+  });
+
+  // Update or create piece record
+  if (data.partNumber && data.partDescription) {
+    // Try to update existing piece first
+    const existingPiece = await db.piece.findFirst({
+      where: { palletId }
+    });
+
+    if (existingPiece) {
+      await db.piece.update({
+        where: { id: existingPiece.id },
+        data: {
+          partNumber: data.partNumber,
+          description: data.partDescription,
+          quantity: data.pieceCount
+        }
+      });
+    } else {
+      await db.piece.create({
+        data: {
+          palletId,
+          partNumber: data.partNumber,
+          description: data.partDescription,
+          quantity: data.pieceCount
+        }
+      });
+    }
+  }
+
+  return pallet;
+}
