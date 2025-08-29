@@ -51,10 +51,11 @@ export function TruckloadClient({ delivery }: TruckloadClientProps) {
 
   const handleDuplicatePallet = (pallet: PalletType) => {
     console.log("Duplicating pallet:", pallet);
-    // Set the pallet as template but clear the ID so it creates a new one
+    // Set the pallet as template but clear ID and LP for new pallet
     setEditingPallet({
       ...pallet,
-      id: undefined // Clear ID so it creates new pallet
+      id: undefined, // Clear ID so it creates new pallet
+      licensePlate: "" // Clear LP - user must enter new unique LP
     });
     setShowPalletModal(true);
   };

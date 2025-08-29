@@ -31,16 +31,19 @@ export async function addPallet(deliveryId: string, licensePlate: string, locati
   const { ctx } = requestInfo;
   
   if (!ctx.user) {
-    throw new Error("User not authenticated");
+    return Response.json({ error: "User not authenticated" }, { status: 401 });
   }
 
   // Check if LP already exists
   const existingPallet = await db.pallet.findFirst({
-    where: { licensePlate }
+    where: { licensePlate },
+    include: { delivery: true }
   });
 
   if (existingPallet) {
-    throw new Error(`License Plate ${licensePlate} already exists`);
+    return Response.json({ 
+      error: `License Plate ${licensePlate} already exists in delivery ${existingPallet.delivery?.easleyProNumber || existingPallet.deliveryId}` 
+    }, { status: 400 });
   }
 
   // Determine status based on whether location is provided
@@ -168,7 +171,22 @@ export async function updatePallet(palletId: string, data: {
   const { ctx } = requestInfo;
   
   if (!ctx.user) {
-    throw new Error("User not authenticated");
+    return Response.json({ error: "User not authenticated" }, { status: 401 });
+  }
+
+  // Check if LP already exists on a different pallet
+  const existingPallet = await db.pallet.findFirst({
+    where: { 
+      licensePlate: data.licensePlate,
+      NOT: { id: palletId } // Exclude current pallet
+    },
+    include: { delivery: true }
+  });
+
+  if (existingPallet) {
+    return Response.json({ 
+      error: `License Plate ${data.licensePlate} already exists in delivery ${existingPallet.delivery?.easleyProNumber || existingPallet.deliveryId}` 
+    }, { status: 400 });
   }
 
   // Update pallet

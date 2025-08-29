@@ -84,16 +84,23 @@ export function PalletModal({ isOpen, onClose, deliveryId, mode, initialData }: 
         pieceCount: pieceCount.trim() ? parseInt(pieceCount) : undefined
       };
       
+      let result;
       if (mode === "add") {
-        await addPallet(deliveryId, licensePlate, location || undefined, pieceData);
+        result = await addPallet(deliveryId, licensePlate, location || undefined, pieceData);
       } else {
-        await updatePallet(initialData!.id!, {
+        result = await updatePallet(initialData!.id!, {
           licensePlate,
           location: location || undefined,
           partNumber: pieceData.partNumber,
           partDescription: pieceData.partDescription,
           pieceCount: pieceData.pieceCount
         });
+      }
+
+      // Check if server returned an error response
+      if (result instanceof Response && !result.ok) {
+        const errorData = await result.json();
+        throw new Error(errorData.error || 'Server error');
       }
       
       // Haptic feedback if available
