@@ -1,10 +1,12 @@
 import { defineConfig } from "vite";
 import { redwood } from "rwsdk/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
+import mkcert from "vite-plugin-mkcert";
 import path from "path";
 
 export default defineConfig({
   plugins: [
+    mkcert(),
     cloudflare({
       viteEnvironment: { name: "worker" },
     }),
