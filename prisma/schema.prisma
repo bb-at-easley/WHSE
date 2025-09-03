@@ -23,7 +23,7 @@ datasource db {
 
 model User {
   id          String      @id @default(uuid()) // User ID (UUID-based)
-  fullName    String      // User's display name  
+  fullName    String?      // User's display name  
   email       String      @unique // Email as login identifier
   passwordHash String?     // Optional for transition period - users can have password OR passkey
   createdAt   DateTime    @default(now())

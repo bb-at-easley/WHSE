@@ -1,17 +1,17 @@
 import { defineApp, ErrorResponse } from "rwsdk/worker";
 import { route, render, prefix } from "rwsdk/router";
 import { Document } from "@/app/Document";
-import { Home } from "@/app/pages/Home";
+// import { Home } from "@/app/pages/Home";
 import { Landing } from "@/app/pages/Landing";
 import { Signup } from "@/app/pages/Signup";
 import { LoginSimple } from "@/app/pages/LoginSimple";
-import { Login } from "@/app/pages/user/Login";
+// import { Login } from "@/app/pages/user/Login";
 import { WarehouseDashboard } from "@/app/pages/warehouse/WarehouseDashboardServer";
 import { DeliveryScreen } from "@/app/pages/warehouse/DeliveryScreen";
 import { createDelivery } from "@/app/pages/warehouse/actions";
 import { setCommonHeaders } from "@/app/headers";
-import { userRoutes } from "@/app/pages/user/routes";
-import { warehouseRoutes } from "@/app/pages/warehouse/routes";
+// import { userRoutes } from "@/app/pages/user/routes";
+// import { warehouseRoutes } from "@/app/pages/warehouse/routes";
 import { sessions, setupSessionStore } from "./session/store";
 import { Session } from "./session/durableObject";
 import { type User, type Organization, type Membership, db, setupDb } from "@/db";
@@ -53,25 +53,6 @@ export async function loadOrganizationContext(orgSlug: string, ctx: AppContext):
     });
   }
 }
-
-// Import types for organization and membership
-type Organization = {
-  id: string;
-  name: string;
-  slug: string;
-  settings: string | null;
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-type Membership = {
-  id: string;
-  role: string;
-  userId: string;
-  organizationId: string;
-  invitedById: string | null;
-  createdAt: Date;
-};
 
 export default defineApp([
   setCommonHeaders(),
@@ -128,7 +109,11 @@ export default defineApp([
         return new Response("Access denied", { status: 403 });
       }
       
-      return <WarehouseDashboard user={ctx.user} organization={ctx.organization} />;
+      return <WarehouseDashboard user={ctx.user} organization={
+      ctx.organization
+        ? { slug: ctx.organization.slug, name: ctx.organization.name }
+        : { slug: "", name: "" } 
+    } />;
     }),
     
     // New truckload route - creates delivery and redirects to truckload screen
@@ -189,12 +174,12 @@ export default defineApp([
     }),
 
     // Keep old passkey login for transition
-    route("/org/easley/user/login", async ({ ctx }) => {
-      const { loadOrganizationContext } = await import("@/worker");
-      const orgResult = await loadOrganizationContext("easley", ctx);
-      if (orgResult) return orgResult;
+    // route("/org/easley/user/login", async ({ ctx }) => {
+    //   const { loadOrganizationContext } = await import("@/worker");
+    //   const orgResult = await loadOrganizationContext("easley", ctx);
+    //   if (orgResult) return orgResult;
       
-      return <Login organization={ctx.organization} />;
-    }),
+    //   return <Login organization={ctx.organization} />;
+    // }),
   ]),
 ]);

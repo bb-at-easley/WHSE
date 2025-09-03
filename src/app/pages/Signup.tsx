@@ -37,7 +37,7 @@ export function Signup() {
       if (response.success) {
         setResult("Account created! Taking you to the warehouse...");
         setTimeout(() => {
-          window.location.href = "/warehouse/dashboard";
+          window.location.href = "/org/easley/warehouse/dashboard";
         }, 2000);
       } else {
         setResult(response.error || "Failed to create account");

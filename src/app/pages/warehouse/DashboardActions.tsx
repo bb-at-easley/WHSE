@@ -5,16 +5,16 @@ import { useState } from "react";
 type DashboardActionsProps = {
   user: {
     id: string;
-    fullName: string;
     email: string;
   };
+  orgSlug: string;
 };
 
-export function DashboardActions({ user }: DashboardActionsProps) {
+export function DashboardActions({ user, orgSlug }: DashboardActionsProps) {
   const [showUserMenu, setShowUserMenu] = useState(false);
 
   const handleStartNewDelivery = () => {
-    window.location.href = '/warehouse/delivery/new';
+    window.location.href = `/org/${orgSlug}/warehouse/delivery/new`;
   };
 
   return (
@@ -85,7 +85,7 @@ export function DashboardActions({ user }: DashboardActionsProps) {
             }}
             onClick={() => setShowUserMenu(!showUserMenu)}
           >
-            👤 {user.fullName.split(' ')[0]}
+            👤 {user.email.split(' ')[0]}
           </button>
           
           {showUserMenu && (
@@ -106,7 +106,7 @@ export function DashboardActions({ user }: DashboardActionsProps) {
                 fontSize: '14px',
                 color: '#333'
               }}>
-                {user.fullName}
+                {user.email}
               </div>
               <button 
                 style={{

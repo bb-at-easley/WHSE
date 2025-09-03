@@ -11,7 +11,6 @@ import { TruckloadCard } from "./TruckloadCard";
 type WarehouseDashboardProps = {
   user: {
     id: string;
-    fullName: string;
     email: string;
   };
   organization: {
@@ -88,7 +87,7 @@ export async function WarehouseDashboard({ user, organization }: WarehouseDashbo
         )}
       </div>
 
-      <DashboardActions user={user} />
+      <DashboardActions user={user} orgSlug={organization.slug}  />
     </div>
   );
 }

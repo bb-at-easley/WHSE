@@ -23,8 +23,8 @@ export default defineScript(async ({ env }) => {
   const testUser = await db.user.create({
     data: {
       id: "test-user-id",
-      username: "testuser",
-      email: "test@easleytransportation.com",
+      email: "test@easleytrans.com",
+      fullName: "Test User"
     },
   });
 
@@ -94,6 +94,6 @@ export default defineScript(async ({ env }) => {
 
   console.log("🌱 Finished seeding:");
   console.log(`   📦 Created organization: ${easleyOrg.name} (/${easleyOrg.slug})`);
-  console.log(`   👤 Created user: ${testUser.username} as OWNER`);
+  console.log(`   👤 Created user: ${testUser.email} as OWNER`);
   console.log(`   🚚 Created ${2} sample deliveries with ${3} pallets`);
 });
