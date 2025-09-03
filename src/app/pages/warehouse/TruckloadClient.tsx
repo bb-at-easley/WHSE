@@ -32,9 +32,13 @@ type TruckloadClientProps = {
   orgSlug: string;
 };
 
-type PalletType = TruckloadClientProps['delivery']['pallets'][0];
+type PalletType = TruckloadClientProps["delivery"]["pallets"][0];
 
 export function TruckloadClient({ delivery, orgSlug }: TruckloadClientProps) {
+  console.log("=== TRUCKLOAD CLIENT DEBUG ===");
+  console.log("delivery:", delivery);
+  console.log("orgSlug:", orgSlug);
+
   const [showPalletModal, setShowPalletModal] = useState(false);
   const [editingPallet, setEditingPallet] = useState<PalletType | null>(null);
 
@@ -56,7 +60,7 @@ export function TruckloadClient({ delivery, orgSlug }: TruckloadClientProps) {
     setEditingPallet({
       ...pallet,
       id: "", // Clear ID so it creates new pallet
-      licensePlate: "" // Clear LP - user must enter new unique LP
+      licensePlate: "", // Clear LP - user must enter new unique LP
     });
     setShowPalletModal(true);
   };
@@ -67,31 +71,38 @@ export function TruckloadClient({ delivery, orgSlug }: TruckloadClientProps) {
   };
 
   return (
-    <div style={{
-      fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      margin: 0,
-      padding: '20px',
-      background: '#f5f5f5',
-      minHeight: '100vh',
-      maxWidth: '400px',
-      marginLeft: 'auto',
-      marginRight: 'auto',
-      position: 'relative'
-    }}>
+    <div
+      style={{
+        fontFamily:
+          '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+        margin: 0,
+        padding: "20px",
+        background: "#f5f5f5",
+        minHeight: "100vh",
+        maxWidth: "400px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        position: "relative",
+      }}
+    >
       <SyncIndicator />
-      
-      <h3 style={{
-        textAlign: 'center',
-        marginBottom: '20px',
-        color: '#333',
-        fontSize: '14px'
-      }}>
-        {delivery.pallets.length > 0 ? 'Truckload in Progress' : 'New Truckload'}
+
+      <h3
+        style={{
+          textAlign: "center",
+          marginBottom: "20px",
+          color: "#333",
+          fontSize: "14px",
+        }}
+      >
+        {delivery.pallets.length > 0
+          ? "Truckload in Progress"
+          : "New Truckload"}
       </h3>
-      
+
       <DeliveryHeader delivery={delivery} />
-      <PalletList 
-        pallets={delivery.pallets} 
+      <PalletList
+        pallets={delivery.pallets}
         onPalletClick={handlePalletClick}
         onDuplicatePallet={handleDuplicatePallet}
       />
@@ -103,14 +114,18 @@ export function TruckloadClient({ delivery, orgSlug }: TruckloadClientProps) {
         deliveryId={delivery.id}
         orgSlug={orgSlug}
         mode={editingPallet?.id ? "edit" : "add"}
-        initialData={editingPallet ? {
-          id: editingPallet.id,
-          licensePlate: editingPallet.licensePlate,
-          location: editingPallet.location || undefined,
-          pieceCount: editingPallet.pieceCount || undefined,
-          partNumber: editingPallet.pieces?.[0]?.partNumber,
-          partDescription: editingPallet.pieces?.[0]?.description
-        } : undefined}
+        initialData={
+          editingPallet
+            ? {
+                id: editingPallet.id,
+                licensePlate: editingPallet.licensePlate,
+                location: editingPallet.location || undefined,
+                pieceCount: editingPallet.pieceCount || undefined,
+                partNumber: editingPallet.pieces?.[0]?.partNumber,
+                partDescription: editingPallet.pieces?.[0]?.description,
+              }
+            : undefined
+        }
       />
     </div>
   );

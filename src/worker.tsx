@@ -141,24 +141,35 @@ export default defineApp([
     }),
     
     // Truckload detail screen
-    route("/org/:orgSlug/warehouse/delivery/:id", async ({ ctx, params }) => {
-      if (!ctx.user) {
-        return new Response(null, {
-          status: 302,
-          headers: { Location: "/" }
-        });
-      }
-      
-      // Load organization context
-      const orgResult = await loadOrganizationContext(params.orgSlug, ctx);
-      if (orgResult) return orgResult;
-      
-      if (!ctx.membership) {
-        return new Response("Access denied", { status: 403 });
-      }
-      
-      return <DeliveryScreen deliveryId={params.id} orgSlug={params.orgSlug} />;
-    }),
+route("/org/:orgSlug/warehouse/delivery/:id", async ({ ctx, params }) => {
+    console.log("=== DELIVERY ROUTE DEBUG ===");
+    console.log("User:", ctx.user?.id);
+    console.log("Params:", params);
+
+    if (!ctx.user) {
+      console.log("No user, redirecting to /");
+      return new Response(null, {
+        status: 302,
+        headers: { Location: "/" }
+      });
+    }
+
+    // Load organization context
+    console.log("Loading org context for:", params.orgSlug);
+    const orgResult = await loadOrganizationContext(params.orgSlug, ctx);
+    if (orgResult) {
+      console.log("Org context returned error response");
+      return orgResult;
+    }
+
+    if (!ctx.membership) {
+      console.log("No membership, returning 403");
+      return new Response("Access denied", { status: 403 });
+    }
+
+    console.log("Rendering DeliveryScreen with membership:", ctx.membership);
+    return <DeliveryScreen deliveryId={params.id} orgSlug={params.orgSlug} />;
+  }),
     
     // Logout route
     route("/logout", async ({ request }) => {
