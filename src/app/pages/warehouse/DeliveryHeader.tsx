@@ -70,10 +70,10 @@ export function DeliveryHeader({ delivery }: DeliveryHeaderProps) {
               transition: 'all 0.2s'
             }}
             onMouseEnter={(e) => {
-              e.target.style.background = '#e0e0e0';
+              (e.target as HTMLButtonElement).style.background = '#e0e0e0';
             }}
             onMouseLeave={(e) => {
-              e.target.style.background = '#f0f0f0';
+              (e.target as HTMLButtonElement).style.background = '#f0f0f0';
             }}
           >
             Edit Details
@@ -109,10 +109,10 @@ export function DeliveryHeader({ delivery }: DeliveryHeaderProps) {
                 transition: 'all 0.2s'
               }}
               onMouseEnter={(e) => {
-                e.target.style.background = '#45a049';
+                (e.target as HTMLButtonElement).style.background = '#45a049';
               }}
               onMouseLeave={(e) => {
-                e.target.style.background = '#4CAF50';
+                (e.target as HTMLButtonElement).style.background = '#4CAF50';
               }}
             >
               Mark Complete

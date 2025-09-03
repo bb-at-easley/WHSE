@@ -5,13 +5,14 @@ import { PalletModal } from "./PalletModal";
 
 type ActionButtonsProps = {
   deliveryId: string;
+  orgSlug: string;
 };
 
-export function ActionButtons({ deliveryId }: ActionButtonsProps) {
+export function ActionButtons({ deliveryId, orgSlug }: ActionButtonsProps) {
   const [showModal, setShowModal] = useState(false);
 
   const handleBack = () => {
-    window.location.href = '/warehouse/dashboard';
+    window.location.href = `/org/${orgSlug}/warehouse/dashboard`;
   };
 
   return (
@@ -67,6 +68,7 @@ export function ActionButtons({ deliveryId }: ActionButtonsProps) {
         isOpen={showModal}
         onClose={() => setShowModal(false)}
         deliveryId={deliveryId}
+        orgSlug={orgSlug}
         mode="add"
       />
     </>

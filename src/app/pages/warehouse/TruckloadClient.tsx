@@ -29,11 +29,12 @@ type TruckloadClientProps = {
       }>;
     }>;
   };
+  orgSlug: string;
 };
 
 type PalletType = TruckloadClientProps['delivery']['pallets'][0];
 
-export function TruckloadClient({ delivery }: TruckloadClientProps) {
+export function TruckloadClient({ delivery, orgSlug }: TruckloadClientProps) {
   const [showPalletModal, setShowPalletModal] = useState(false);
   const [editingPallet, setEditingPallet] = useState<PalletType | null>(null);
 
@@ -54,7 +55,7 @@ export function TruckloadClient({ delivery }: TruckloadClientProps) {
     // Set the pallet as template but clear ID and LP for new pallet
     setEditingPallet({
       ...pallet,
-      id: undefined, // Clear ID so it creates new pallet
+      id: "", // Clear ID so it creates new pallet
       licensePlate: "" // Clear LP - user must enter new unique LP
     });
     setShowPalletModal(true);
@@ -94,12 +95,13 @@ export function TruckloadClient({ delivery }: TruckloadClientProps) {
         onPalletClick={handlePalletClick}
         onDuplicatePallet={handleDuplicatePallet}
       />
-      <ActionButtons deliveryId={delivery.id} />
-      
+      <ActionButtons deliveryId={delivery.id} orgSlug={orgSlug} />
+
       <PalletModal
         isOpen={showPalletModal}
         onClose={handleModalClose}
         deliveryId={delivery.id}
+        orgSlug={orgSlug}
         mode={editingPallet?.id ? "edit" : "add"}
         initialData={editingPallet ? {
           id: editingPallet.id,

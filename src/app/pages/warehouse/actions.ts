@@ -28,7 +28,7 @@ export async function createDelivery(truckNumber?: string) {
   return delivery;
 }
 
-export async function addPallet(deliveryId: string, licensePlate: string, location?: string, pieceData?: {
+export async function addPallet(deliveryId: string, licensePlate: string, orgSlug: string, location?: string, pieceData?: {
   partNumber?: string;
   partDescription?: string;
   pieceCount?: number;
@@ -38,6 +38,15 @@ export async function addPallet(deliveryId: string, licensePlate: string, locati
   if (!ctx.user) {
     return { error: "User not authenticated" };
   }
+  
+  // Load organization context in server function
+  const { loadOrganizationContext } = await import("@/worker");
+  const orgResult = await loadOrganizationContext(orgSlug, ctx);
+  if (orgResult) {
+    return { error: "Organization not found or access denied" };
+  }
+  
+  console.log("CTX with org context:", ctx);
   
   if (!ctx.organization) {
     return { error: "Organization context required" };
@@ -197,7 +206,7 @@ export async function getDelivery(deliveryId: string) {
   return delivery;
 }
 
-export async function updatePallet(palletId: string, data: {
+export async function updatePallet(palletId: string, orgSlug: string, data: {
   licensePlate: string;
   location?: string;
   partNumber?: string;
@@ -208,6 +217,13 @@ export async function updatePallet(palletId: string, data: {
   
   if (!ctx.user) {
     return { error: "User not authenticated" };
+  }
+  
+  // Load organization context in server function
+  const { loadOrganizationContext } = await import("@/worker");
+  const orgResult = await loadOrganizationContext(orgSlug, ctx);
+  if (orgResult) {
+    return { error: "Organization not found or access denied" };
   }
   
   if (!ctx.organization) {

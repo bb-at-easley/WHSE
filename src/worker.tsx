@@ -157,7 +157,7 @@ export default defineApp([
         return new Response("Access denied", { status: 403 });
       }
       
-      return <DeliveryScreen deliveryId={params.id} />;
+      return <DeliveryScreen deliveryId={params.id} orgSlug={params.orgSlug} />;
     }),
     
     // Logout route
