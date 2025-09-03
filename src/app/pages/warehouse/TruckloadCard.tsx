@@ -9,9 +9,10 @@ type TruckloadCardProps = {
     createdAt: Date;
     pallets: Array<{ status: string }>;
   };
+  orgSlug: string;
 };
 
-export function TruckloadCard({ delivery }: TruckloadCardProps) {
+export function TruckloadCard({ delivery, orgSlug }: TruckloadCardProps) {
   const palletCount = delivery.pallets.length;
   const receivedCount = delivery.pallets.filter(p => p.status === "RECEIVED").length;
   const startTime = new Date(delivery.createdAt).toLocaleTimeString('en-US', {
@@ -33,7 +34,7 @@ export function TruckloadCard({ delivery }: TruckloadCardProps) {
         opacity: delivery.status === 'ACTIVE' ? 1 : 0.8
       }}
       onClick={() => {
-        window.location.href = `/warehouse/delivery/${delivery.id}`;
+        window.location.href = `/org/${orgSlug}/warehouse/delivery/${delivery.id}`;
       }}
     >
       <div style={{

@@ -9,11 +9,16 @@ export async function createDelivery(truckNumber?: string) {
   if (!ctx.user) {
     throw new Error("User not authenticated");
   }
+  
+  if (!ctx.organization) {
+    throw new Error("Organization context required");
+  }
 
   const delivery = await db.delivery.create({
     data: {
       truckNumber,
       userId: ctx.user.id,
+      organizationId: ctx.organization.id,
     },
     include: {
       pallets: true
@@ -33,12 +38,19 @@ export async function addPallet(deliveryId: string, licensePlate: string, locati
   if (!ctx.user) {
     return { error: "User not authenticated" };
   }
+  
+  if (!ctx.organization) {
+    return { error: "Organization context required" };
+  }
 
-  // Check if LP already exists (only if LP is provided and not empty)
+  // Check if LP already exists within this organization (only if LP is provided and not empty)
   if (licensePlate && licensePlate.trim()) {
     const existingPallet = await db.pallet.findFirst({
       where: { 
-        licensePlate: licensePlate.trim() 
+        licensePlate: licensePlate.trim(),
+        delivery: {
+          organizationId: ctx.organization?.id
+        }
       },
       include: { delivery: true }
     });
@@ -82,6 +94,20 @@ export async function updateDeliveryStatus(deliveryId: string, status: "ACTIVE" 
   if (!ctx.user) {
     throw new Error("User not authenticated");
   }
+  
+  if (!ctx.organization) {
+    throw new Error("Organization context required");
+  }
+
+  // First verify the delivery belongs to this organization
+  const existingDelivery = await db.delivery.findUnique({
+    where: { id: deliveryId },
+    select: { organizationId: true }
+  });
+  
+  if (!existingDelivery || existingDelivery.organizationId !== ctx.organization.id) {
+    throw new Error("Delivery not found");
+  }
 
   const delivery = await db.delivery.update({
     where: { id: deliveryId },
@@ -100,14 +126,18 @@ export async function getAllDeliveries() {
   if (!ctx.user) {
     throw new Error("User not authenticated");
   }
+  
+  if (!ctx.organization) {
+    throw new Error("Organization context required");
+  }
 
-  // Get all deliveries from last 30 days, active first
+  // Get all deliveries for this organization from last 30 days, active first
   const thirtyDaysAgo = new Date();
   thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
   const deliveries = await db.delivery.findMany({
     where: { 
-      userId: ctx.user.id,
+      organizationId: ctx.organization.id,
       createdAt: {
         gte: thirtyDaysAgo
       }
@@ -136,6 +166,10 @@ export async function getDelivery(deliveryId: string) {
   if (!ctx.user) {
     throw new Error("User not authenticated");
   }
+  
+  if (!ctx.organization) {
+    throw new Error("Organization context required");
+  }
 
   const delivery = await db.delivery.findUnique({
     where: { id: deliveryId },
@@ -156,7 +190,7 @@ export async function getDelivery(deliveryId: string) {
     }
   });
 
-  if (!delivery || delivery.userId !== ctx.user.id) {
+  if (!delivery || delivery.organizationId !== ctx.organization.id) {
     throw new Error("Delivery not found");
   }
 
@@ -175,13 +209,20 @@ export async function updatePallet(palletId: string, data: {
   if (!ctx.user) {
     return { error: "User not authenticated" };
   }
+  
+  if (!ctx.organization) {
+    return { error: "Organization context required" };
+  }
 
-  // Check if LP already exists on a different pallet (only if LP is provided and not empty)
+  // Check if LP already exists on a different pallet within this organization (only if LP is provided and not empty)
   if (data.licensePlate && data.licensePlate.trim()) {
     const existingPallet = await db.pallet.findFirst({
       where: { 
         licensePlate: data.licensePlate.trim(),
-        NOT: { id: palletId } // Exclude current pallet
+        NOT: { id: palletId }, // Exclude current pallet
+        delivery: {
+          organizationId: ctx.organization?.id
+        }
       },
       include: { delivery: true }
     });

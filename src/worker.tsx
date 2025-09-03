@@ -111,8 +111,8 @@ export default defineApp([
     route("/signup", Signup),
     route("/login", LoginSimple),
     
-    // Warehouse dashboard (protected)
-    route("/warehouse/dashboard", async ({ ctx }) => {
+    // Warehouse dashboard (protected) - with organization context
+    route("/org/:orgSlug/warehouse/dashboard", async ({ ctx, params }) => {
       if (!ctx.user) {
         return new Response(null, {
           status: 302,
@@ -120,33 +120,57 @@ export default defineApp([
         });
       }
       
-      return <WarehouseDashboard user={ctx.user} />;
+      // Load organization context
+      const orgResult = await loadOrganizationContext(params.orgSlug, ctx);
+      if (orgResult) return orgResult;
+      
+      if (!ctx.membership) {
+        return new Response("Access denied", { status: 403 });
+      }
+      
+      return <WarehouseDashboard user={ctx.user} organization={ctx.organization} />;
     }),
     
     // New truckload route - creates delivery and redirects to truckload screen
-    route("/warehouse/delivery/new", async ({ ctx }) => {
+    route("/org/:orgSlug/warehouse/delivery/new", async ({ ctx, params }) => {
       if (!ctx.user) {
         return new Response(null, {
           status: 302,
           headers: { Location: "/" }
         });
+      }
+      
+      // Load organization context
+      const orgResult = await loadOrganizationContext(params.orgSlug, ctx);
+      if (orgResult) return orgResult;
+      
+      if (!ctx.membership) {
+        return new Response("Access denied", { status: 403 });
       }
       
       const delivery = await createDelivery();
       
       return new Response(null, {
         status: 302,
-        headers: { Location: `/warehouse/delivery/${delivery.id}` }
+        headers: { Location: `/org/${params.orgSlug}/warehouse/delivery/${delivery.id}` }
       });
     }),
     
     // Truckload detail screen
-    route("/warehouse/delivery/:id", async ({ ctx, params }) => {
+    route("/org/:orgSlug/warehouse/delivery/:id", async ({ ctx, params }) => {
       if (!ctx.user) {
         return new Response(null, {
           status: 302,
           headers: { Location: "/" }
         });
+      }
+      
+      // Load organization context
+      const orgResult = await loadOrganizationContext(params.orgSlug, ctx);
+      if (orgResult) return orgResult;
+      
+      if (!ctx.membership) {
+        return new Response("Access denied", { status: 403 });
       }
       
       return <DeliveryScreen deliveryId={params.id} />;

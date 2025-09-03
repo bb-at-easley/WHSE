@@ -61,6 +61,7 @@ model Organization {
   
   // Relations
   memberships Membership[]
+  deliveries  Delivery[]
 }
 
 model Membership {
@@ -92,22 +93,25 @@ enum Role {
 // Warehouse models for truckload management
 
 model Delivery {
-  id            String   @id @default(uuid())
+  id              String   @id @default(uuid())
+  organizationId  String   // Multi-tenant: which organization this delivery belongs to
   easleyProNumber String? // Easley Pro # from TMS (Order Number)
-  truckNumber   String?  // Optional truck identifier (e.g., "TR-4471")
-  trailerNumber String?  // Trailer number from BOL
-  sealNumber    String?  // Seal number from BOL
-  bolNumber     String?  // Bill of Lading number
-  notes         String?  // General notes about this truckload
-  status        DeliveryStatus @default(ACTIVE)
-  userId        String   // Who started this delivery
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  truckNumber     String?  // Optional truck identifier (e.g., "TR-4471")
+  trailerNumber   String?  // Trailer number from BOL
+  sealNumber      String?  // Seal number from BOL
+  bolNumber       String?  // Bill of Lading number
+  notes           String?  // General notes about this truckload
+  status          DeliveryStatus @default(ACTIVE)
+  userId          String   // Who started this delivery
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   
   // Relations
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  pallets Pallet[]
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pallets      Pallet[]
   
+  @@index([organizationId])
   @@index([userId])
   @@index([status])
   @@index([createdAt]) // For dashboard sorting

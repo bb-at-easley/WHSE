@@ -23,7 +23,7 @@ export function LoginSimple() {
       if (response.success) {
         setResult("Welcome back! Taking you to the warehouse...");
         setTimeout(() => {
-          window.location.href = "/warehouse/dashboard";
+          window.location.href = "/org/easley/warehouse/dashboard";
         }, 2000);
       } else {
         setResult(response.error || "Failed to log in");

@@ -14,9 +14,13 @@ type WarehouseDashboardProps = {
     fullName: string;
     email: string;
   };
+  organization: {
+    slug: string;
+    name: string;
+  };
 };
 
-export async function WarehouseDashboard({ user }: WarehouseDashboardProps) {
+export async function WarehouseDashboard({ user, organization }: WarehouseDashboardProps) {
   const allDeliveries = await getAllDeliveries();
   const activeDeliveries = allDeliveries.filter(d => d.status === "ACTIVE");
   const completedDeliveries = allDeliveries.filter(d => d.status === "COMPLETED");
@@ -70,7 +74,7 @@ export async function WarehouseDashboard({ user }: WarehouseDashboardProps) {
       <div style={{ marginBottom: '100px' }}>
         {allDeliveries.length > 0 ? (
           allDeliveries.map((delivery) => (
-            <TruckloadCard key={delivery.id} delivery={delivery} />
+            <TruckloadCard key={delivery.id} delivery={delivery} orgSlug={organization.slug} />
           ))
         ) : (
           <div style={{
