@@ -5,7 +5,6 @@ import { Document } from "@/app/Document";
 import { Landing } from "@/app/pages/Landing";
 import { Signup } from "@/app/pages/Signup";
 import { LoginSimple } from "@/app/pages/LoginSimple";
-// import { Login } from "@/app/pages/user/Login";
 import { WarehouseDashboard } from "@/app/pages/warehouse/WarehouseDashboardServer";
 import { DeliveryScreen } from "@/app/pages/warehouse/DeliveryScreen";
 import { createDelivery } from "@/app/pages/warehouse/actions";
